@@ -1,0 +1,88 @@
+QLabel#speed,#product_name,#product_id,#detect_time{
+    color:white;
+    font-size:17px;
+    font-family:Roman times;
+    border: 1px solid white;
+    border-radius: 2px;
+}
+QLabel{
+    color:white;
+    font-size:17px;
+    font-family:Roman times;
+}
+
+
+QWidget#camera1,#camera2,#camera3,#camera4{
+     border: 2px solid white;
+}
+QPushButton#RedButton {
+    background-color: #FF632E;
+    border-radius: 8px;
+    padding: 8px 16px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 15px;
+    margin: 4px 2px;
+    color: white;
+}
+QPushButton#BlueButton {
+    background-color: #2683D1;
+    border-radius: 8px;
+    padding: 8px 16px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 15px;
+    margin: 4px 2px;
+    color: white;
+}
+QPushButton#GreenButton {
+    background-color: #1C8B58;
+    border-radius: 8px;
+    padding: 8px 16px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 15px;
+    margin: 4px 2px;
+    color: white;
+}
+QPushButton#RedButton:hover,#GreenButton:hover,#BlueButton:hover {
+    background-color: white;
+    border: 2px solid #f44336;
+    color: black;
+}
+
+QPushButton#RedButton:pressed,#GreenButton:pressed,#BlueButton:pressed {
+    background-color: #06AD56;
+}
+
+QTableView {
+	background:transparent;/*背景透明*/
+    color: white;
+    gridline-color: white;
+    background-color:dimgray;
+    alternate-background-color: rgb(64, 64, 64);
+    selection-color: white;
+    selection-background-color: rgb(77, 77, 77);
+    border: 2px groove gray;
+}
+QHeaderView {
+    color: white;
+    font-size: bold 10pt;
+    background-color: dimgray;
+    border: 0px solid white;
+    border:0px solid white;
+    border-left-color: rgba(255, 255, 255, 0);
+    border-top-color: rgba(255, 255, 255, 0);
+    border-radius:0px;
+    min-height:29px;
+}
+
+QHeaderView::section {
+    color: white;
+    background-color:dimgray;
+    border: 1px solid white;
+    border-radius:0px;
+    border-color:white;
+}
+
+

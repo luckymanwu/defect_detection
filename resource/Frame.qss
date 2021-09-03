@@ -1,0 +1,29 @@
+ QTableView {
+	background:transparent;/*背景透明*/
+    color: white;
+    gridline-color: white;
+    background-color:dimgray;
+    alternate-background-color: rgb(64, 64, 64);
+    selection-color: white;
+    selection-background-color: rgb(77, 77, 77);
+    border: 2px groove gray;
+}
+QHeaderView {
+    color: white;
+    font-size: bold 10pt;
+    background-color: dimgray;
+    border: 0px solid white;
+    border:0px solid white;
+    border-left-color: rgba(255, 255, 255, 0);
+    border-top-color: rgba(255, 255, 255, 0);
+    border-radius:0px;
+    min-height:29px;
+}
+
+QHeaderView::section {
+    color: white;
+    background-color:dimgray;
+    border: 1px solid white;
+    border-radius:0px;
+    border-color:white;
+}

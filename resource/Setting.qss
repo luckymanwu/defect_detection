@@ -1,0 +1,118 @@
+.QGroupBox{
+border:1px solid darkgray;
+border-radius:4px;
+margin-top:8px;
+padding: 6px 0;
+}
+
+.QGroupBox::title{
+subcontrol-origin:margin;
+position:relative;
+left:10px;
+color : white;
+}
+
+QLineEdit {
+     font-size:17px;
+     font-family:Roman times;
+     border: 1px solid gray;
+     border-radius: 4px;
+     padding: 0 0;
+     background: gray;
+     color : white;
+     selection-background-color: rgb(4,113,206);
+}
+
+.QPushButton{
+    border-style:none;
+    border:1px solid #242424;
+    color:#DCDCDC;
+    padding:5px;
+    min-height:15;
+    min-width : 60;
+    border-radius:5px;
+    background:qlineargradient(spread:pad,x1:0,y1:0,x2:0,y2:1,stop:0 #484848,stop:1 #383838);
+}
+
+QSpinBox{
+    font-size:14px;
+    font-family:Roman times;
+    border:1px solid #242424;
+    border-radius:3px;
+    padding:2px;
+    background:#484848;
+    color:white;
+    selection-color:#DCDCDC;
+}
+
+.QLabel:disabled{
+    color : gray;
+}
+QCheckBox,QLabel{
+    font-size:17px;
+    font-family:Roman times;
+    color : white;
+}
+
+QCheckBox:disabled{
+    color : gray;
+}
+/*QCheckBox::indicator:unchecked{//QCheckbox的方框*/
+/*image:url(:/psblack/checkbox_unchecked.png);*/
+/*}*/
+
+/*QCheckBox::indicator:unchecked:disabled{*/
+/*image:url(:/psblack/checkbox_unchecked_disable.png);*/
+/*}*/
+
+/*QCheckBox::indicator:checked{*/
+/*image:url(:/psblack/checkbox_checked.png);*/
+/*}*/
+
+/*QCheckBox::indicator:checked:disabled{*/
+/*image:url(:/psblack/checkbox_checked_disable.png);*/
+/*}*/
+
+/*QCheckBox::indicator:indeterminate{*/
+/*image:url(:/psblack/checkbox_parcial.png);*/
+/*}*/
+
+/*QCheckBox::indicator:indeterminate:disabled{*/
+/*image:url(:/psblack/checkbox_parcial_disable.png);*/
+/*}*/
+
+
+.QPushButton:hover{
+background:qlineargradient(spread:pad,x1:0,y1:0,x2:0,y2:1,stop:0 #646464,stop:1 #525252)
+}
+.QPushButton:pressed{
+background:qlineargradient(spread:pad,x1:0,y1:0,x2:0,y2:1,stop:0 #484848,stop:1 #383838)}
+
+.QPushButton:disabled{
+    background:darkgray;
+}
+QCheckBox:disabled{
+    color : gray;
+}
+
+
+QRadioButton{
+    color : white;
+}
+
+/*QRadioButton::indicator::unchecked{*/
+/*image:url(:/psblack/radiobutton_unchecked.png);*/
+/*}*/
+
+/*QRadioButton::indicator::unchecked:disabled{*/
+/*image:url(:/psblack/radiobutton_unchecked_disable.png);*/
+/*}*/
+
+/*QRadioButton::indicator::checked{*/
+/*image:url(:/psblack/radiobutton_checked.png);*/
+/*}*/
+
+/*QRadioButton::indicator::checked:disabled{*/
+/*image:url(:/psblack/radiobutton_checked_disable.png);*/
+/*}*/
+

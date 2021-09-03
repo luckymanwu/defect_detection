@@ -1,0 +1,51 @@
+TitleBar {
+     background-color:#6C7272 ;
+ }
+ /*最小化最大化关闭按钮通用默认背景*/
+#buttonMinimum,#buttonMaximum,#buttonClose {
+     border: none;
+     background-color: #6C7272;
+}
+ /*悬停*/
+#buttonMinimum:hover,#buttonMaximum:hover {
+     background-color: red;
+     color: white;
+}
+#buttonClose:hover {
+     color: white;
+}
+ /*鼠标按下不放*/
+#buttonMinimum:pressed,#buttonMaximum:pressed {
+     background-color: Firebrick;
+}
+#buttonClose:pressed {
+     color: white;
+     background-color: Firebrick;
+}
+QLabel{
+     color:white;
+     font-size:17px;
+     font-family:Roman times;
+}
+.QPushButton{
+    border-style:none;
+    border:1px solid #242424;
+    color:#DCDCDC;
+    padding:5px;
+    min-height:15;
+    min-width : 60;
+    border-radius:5px;
+    background:qlineargradient(spread:pad,x1:0,y1:0,x2:0,y2:1,stop:0 #484848,stop:1 #383838);
+}
+.QPushButton:hover{
+background:qlineargradient(spread:pad,x1:0,y1:0,x2:0,y2:1,stop:0 #646464,stop:1 #525252);}
+
+.QPushButton:pressed{
+background:qlineargradient(spread:pad,x1:0,y1:0,x2:0,y2:1,stop:0 #484848,stop:1 #383838);}
+
+.QPushButton:disabled{
+    background:darkgray;
+}
+QCheckBox:disabled{
+    color : gray;
+}

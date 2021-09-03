@@ -1,0 +1,30 @@
+QLabel{
+    color:white;
+    font-size:17px;
+    font-family:Roman times;
+}
+#Title{
+    font-size:25px;
+    font-weight:bold;
+    font-family:Roman times
+}
+QLineEdit {
+     border: 1px solid gray;
+     border-radius: 4px;
+     font-size:14px;
+     padding: 0 0;
+     background: gray;
+     color : white;
+     /*selection-background-color: rgb(4,113,206,220);*/
+}
+.QPushButton{
+    border-style:none;
+    border:1px solid #242424;
+    font-size:15px;
+    color:#DCDCDC;
+    padding:5px;
+    min-height:20;
+    min-width : 60;
+    border-radius:5px;
+    background:qlineargradient(spread:pad,x1:0,y1:0,x2:0,y2:1,stop:0 #484848,stop:1 #383838);
+}
