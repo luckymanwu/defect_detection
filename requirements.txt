@@ -6,6 +6,7 @@ torch >= 1.5
 matplotlib
 pycocotools
 tqdm
+pyqt5
 pillow
 tensorboard >= 1.14
 
