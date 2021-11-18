@@ -7,6 +7,9 @@ from UI.Detection.Detection import Detection
 from UI.Setting.Setting import Setting
 from UI.PictureDetection.PictureDetection import PictureDetection
 from UI.Annotation.Annotation import Annotation
+from UI.Train.Train import Train
+
+
 class LeftTabWidget(QWidget):
      '''左侧选项栏'''
      def __init__(self,configuration):
@@ -24,17 +27,25 @@ class LeftTabWidget(QWidget):
          self.main_layout.addWidget(self.right_widget)
          self.showWin = None
          self.configuration = configuration
+         self.Detection = Detection(self.configuration)
+         self.PictureDetection=PictureDetection(self.configuration)
+         self.Annotation = Annotation(self.configuration)
+         self.Train = Train(self.configuration)
+         self.Setting = Setting(self.configuration)
+         self.Setting.train_modal_signal.connect(self.update_train)
          self._setup_ui()
 
+     def update_train(self,title):
+         self.Train.chart.setTitle("训练模式: "+title)
      def _setup_ui(self):
          '''加载界面ui'''
          self.left_widget.currentRowChanged.connect(self.right_widget.setCurrentIndex)   #list和右侧窗口的index对应绑定
          self.left_widget.setFrameShape(QListWidget.NoFrame)    #去掉边框
          self.left_widget.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)  #隐藏滚动条
          self.left_widget.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-         list_str = ['实时检测','图片检测','图片标注','设置']
-         win_list=[Detection(self.configuration),PictureDetection(self.configuration),Annotation(self.configuration),Setting(self.configuration)]
-         for i in range(4):
+         list_str = ['实时检测','图片检测','图片标注','模型训练','设置']
+         win_list=[self.Detection,self.PictureDetection,self.Annotation,self.Train,self.Setting]
+         for i in range(5):
              self.item = QListWidgetItem(list_str[i],self.left_widget)   #左侧选项的添加
              self.item.setSizeHint(QSize(30,60))
              self.item.setTextAlignment(Qt.AlignCenter)                  #居中显示

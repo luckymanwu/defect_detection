@@ -36,8 +36,7 @@ class TitleBar(QWidget):
           self.titleLabel.setMargin(10)
           layout.addWidget(self.titleLabel)
           layout.addSpacerItem(QSpacerItem(30, 20))
-          self.newTicket = QPushButton("New Ticket",self)
-          layout.addWidget(self.newTicket)
+
           # 中间伸缩条
           layout.addSpacerItem(QSpacerItem(
               40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum))
@@ -58,10 +57,8 @@ class TitleBar(QWidget):
           layout.addWidget(self.buttonClose)
           # 初始高度
           self.setHeight()
-          self.newTicket.clicked.connect(self.createTicket)
-          self.ticket = Ticket()
-    def createTicket(self,event):
-        self.ticket.show()
+
+
 
     def showMaximized(self):
          if self.buttonMaximum.text() == '1':

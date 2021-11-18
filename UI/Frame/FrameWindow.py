@@ -1,7 +1,6 @@
 import sys
-import qdarkstyle
 from PyQt5.QtCore import QSize, QSettings
-from PyQt5.QtWidgets import QApplication
+from PyQt5.QtWidgets import QApplication, QLabel
 from PyQt5.QtCore import Qt,QPoint
 from PyQt5.QtGui import QEnterEvent, QPainter, QColor, QPen, QPixmap
 from PyQt5.QtGui import QIcon
@@ -18,9 +17,6 @@ class FramelessWindow(QWidget):
      Margins = 5
      def __init__(self, *args, **kwargs):
          super(FramelessWindow, self).__init__(*args, **kwargs)
-         # styleFile = '../resource/Frame.qss'
-         # style = CommonHelper.readQss(styleFile)
-         # self.setStyleSheet(style)
          self._pressed = False
          self.Direction = None
          self.setAttribute(Qt.WA_TranslucentBackground, True)
@@ -46,7 +42,6 @@ class FramelessWindow(QWidget):
      def setTitleBarHeight(self, height=35):
          """设置标题栏高度"""
          self.titleBar.setHeight(height)
-
 
      def setIconSize(self, size):
          """设置图标的大小"""
@@ -241,9 +236,9 @@ if __name__ == '__main__':
      icon.addPixmap(QPixmap("../resource/logo3.ico"))
      mainWnd.setWindowIcon(icon)
      mainWnd.setWindowTitle('SMMD')
-     mainWnd.resize(QSize(1400,950))
-
+     mainWnd.resize(QSize(1500,1000))
      mainWnd.center()
-     mainWnd.setWidget(MainWindow())  # 把自己的窗口添加进来
+     mw = MainWindow()
+     mainWnd.setWidget(mw)  # 把自己的窗口添加进来
      mainWnd.show()
      sys.exit(app.exec_())

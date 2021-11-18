@@ -1,0 +1,62 @@
+
+QTabWidget::pane {
+    border: 1px solid white;
+    border-radius: 2px;
+	background:transparent;
+}
+QTabWidget::tab-bar {
+    font-size:15px;
+	background:transparent;
+	subcontrol-position:center;
+}
+
+QTabBar::tab {font-size:15px;
+ min-width:75px;
+ min-height:55px;
+ background:transparent;
+}
+
+QTabBar::tab:selected {
+color: rgb(36,197,219);
+background:transparent;
+}
+
+QTabBar::tab:!selected {
+color: white;
+background:transparent;
+}
+
+QTabBar::tab:hover {
+    color: rgb(36, 197, 219);
+    background: transparent;
+}
+
+QLabel{
+    color:white;
+    font-size:17px;
+    font-family:Roman times;
+	background:transparent;
+}
+
+.QPushButton{
+    border-style:none;
+    border:1px solid #242424;
+    color:#DCDCDC;
+    padding:5px;
+    min-height:15;
+    min-width : 60;
+    border-radius:5px;
+    background:qlineargradient(spread:pad,x1:0,y1:0,x2:0,y2:1,stop:0 #484848,stop:1 #383838);
+}
+
+.QPushButton:hover{
+background:qlineargradient(spread:pad,x1:0,y1:0,x2:0,y2:1,stop:0 #646464,stop:1 #525252)
+}
+.QPushButton:pressed{
+background:qlineargradient(spread:pad,x1:0,y1:0,x2:0,y2:1,stop:0 #484848,stop:1 #383838)}
+
+.QPushButton:disabled{
+    background:darkgray;
+}
+
+

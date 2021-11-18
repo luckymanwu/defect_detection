@@ -9,7 +9,7 @@ def parse_model_cfg(path):
         path += '.cfg'
     if not os.path.exists(path) and os.path.exists('cfg' + os.sep + path):  # add cfg/ prefix if omitted
         path = 'cfg' + os.sep + path
-
+    print(path)
     with open(path, 'r') as f:
         lines = f.read().split('\n')
     lines = [x for x in lines if x and not x.startswith('#')]
@@ -66,5 +66,25 @@ def parse_data_cfg(path):
             continue
         key, val = line.split('=')
         options[key.strip()] = val.strip()
+
+    return options
+
+
+def parse_rbc_name(path):
+    # Parses the data configuration file
+    if not os.path.exists(path) and os.path.exists('data' + os.sep + path):  # add data/ prefix if omitted
+        path = 'data' + os.sep + path
+
+    with open(path, 'r') as f:
+        lines = f.readlines()
+
+    options = dict()
+    id = 0
+    for line in lines:
+        line = line.strip()
+        if line == '' or line.startswith('#'):
+            continue
+        options[line] = id
+        id+=1
 
     return options

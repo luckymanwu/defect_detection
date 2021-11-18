@@ -82,15 +82,15 @@ QLineEdit {
      border: 1px solid gray;
      border-radius: 4px;
      padding: 0 0;
-     background: gray;
-     color : white;
+     /*background: gray;*/
+     color : black;
      selection-background-color: rgb(4,113,206);
 }
-QListWidget#label_list,#info{
+QListWidget#info,#file_list_widget{
      background: gray;
-     font-size:20px;
+     font-size:14px;
      font-family:Roman times;
      color : white;
-    font-weight:bold;
+     font-weight:bold;
 }
 

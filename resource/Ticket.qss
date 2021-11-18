@@ -28,3 +28,18 @@ QLineEdit {
     border-radius:5px;
     background:qlineargradient(spread:pad,x1:0,y1:0,x2:0,y2:1,stop:0 #484848,stop:1 #383838);
 }
+QProgressBar{
+        border: none;
+        color: white;
+        text-align: center;
+        background: rgb(68, 69, 73);
+}
+QProgressBar::chunk {
+        border: none;
+        background: rgb(0, 160, 230);
+}
+QTextEdit{
+    font-family:Roman times;
+    font-size: 20px;
+}
+

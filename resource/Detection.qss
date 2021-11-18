@@ -1,4 +1,4 @@
-QLabel#speed,#product_name,#product_id,#detect_time{
+QLabel#speed_label,#product_name_label,#product_id_label,#detect_time_label{
     color:white;
     font-size:17px;
     font-family:Roman times;
@@ -45,13 +45,23 @@ QPushButton#GreenButton {
     margin: 4px 2px;
     color: white;
 }
-QPushButton#RedButton:hover,#GreenButton:hover,#BlueButton:hover {
+QPushButton#grayButton {
+    background-color: gray;
+    border-radius: 8px;
+    padding: 8px 16px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 15px;
+    margin: 4px 2px;
+    color: white;
+}
+QPushButton#RedButton:hover,#GreenButton:hover,#BlueButton,#grayButton:hover {
     background-color: white;
     border: 2px solid #f44336;
     color: black;
 }
 
-QPushButton#RedButton:pressed,#GreenButton:pressed,#BlueButton:pressed {
+QPushButton#RedButton:pressed,#GreenButton:pressed,#BlueButton,#grayButton:pressed {
     background-color: #06AD56;
 }
 

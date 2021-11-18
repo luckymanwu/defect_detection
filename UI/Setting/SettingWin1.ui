@@ -27,7 +27,7 @@
     <number>30</number>
    </property>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="2,3,2">
+    <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="2,0,2">
      <item>
       <widget class="QGroupBox" name="Carmer_control">
        <property name="font">
@@ -63,15 +63,15 @@
           </property>
          </widget>
         </item>
-        <item row="2" column="0">
-         <widget class="QCheckBox" name="carmer_three">
+        <item row="4" column="0">
+         <widget class="QCheckBox" name="carmer_all">
           <property name="font">
            <font>
             <pointsize>15</pointsize>
            </font>
           </property>
           <property name="text">
-           <string>Carmer three</string>
+           <string>All</string>
           </property>
          </widget>
         </item>
@@ -87,15 +87,15 @@
           </property>
          </widget>
         </item>
-        <item row="4" column="0">
-         <widget class="QCheckBox" name="carmer_all">
+        <item row="2" column="0">
+         <widget class="QCheckBox" name="carmer_three">
           <property name="font">
            <font>
             <pointsize>15</pointsize>
            </font>
           </property>
           <property name="text">
-           <string>All</string>
+           <string>Carmer three</string>
           </property>
          </widget>
         </item>
@@ -151,17 +151,104 @@
         </widget>
        </item>
        <item>
-        <spacer name="horizontalSpacer">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
+        <widget class="QGroupBox" name="train_setting">
+         <property name="font">
+          <font>
+           <pointsize>14</pointsize>
+          </font>
          </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
+         <property name="title">
+          <string>Train Setting</string>
          </property>
-        </spacer>
+         <layout class="QGridLayout" name="gridLayout_4">
+          <item row="0" column="1">
+           <widget class="QLineEdit" name="epoch_lineEdit"/>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="epoch_label">
+            <property name="font">
+             <font>
+              <pointsize>12</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>epochs:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="batch_size_label">
+            <property name="font">
+             <font>
+              <pointsize>12</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>batch-szie:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="train_model_labe">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>12</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>train model:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QRadioButton" name="semi_train">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>150</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>semi-train</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QLineEdit" name="batch_size_lineEdit"/>
+          </item>
+          <item row="2" column="2">
+           <widget class="QRadioButton" name="normal_train">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>150</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>normal-train</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
        </item>
        <item>
         <widget class="QGroupBox" name="Skin_Setting">
