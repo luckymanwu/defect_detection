@@ -4,24 +4,6 @@ from Service.models import *  # set ONNX_EXPORT in models.py
 from project.datasets import *
 from project.utils import *
 
-
-def ostu(img):
-    area = 0
-    image = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)  # 转灰度
-    blur = cv2.GaussianBlur(image, (5, 5), 0)  # 阈值一定要设为 0 ！高斯模糊
-    # ret3,th3 = cv2.threshold(blur,30,255,cv2.THRESH_BINARY) # 二值化 0 = black ; 1 = white 255白色 0黑色
-    ret3, th3 = cv2.threshold(blur, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)  # 二值化 0 = black ; 1 = white 255白色 0黑色
-    # kernel = np.ones((5, 5), np.uint8)
-    # opening = cv2.morphologyEx(img, cv2.MORPH_OPEN, kernel)
-    cv2.imshow("test",th3)
-    cv2.waitKey(0)
-    height, width = th3.shape
-    for i in range(height):
-        for j in range(width):
-            if th3[i, j] == 0:
-                area += 1
-    return area
-
 class hkDetect:
     def __init__(self,opt=None):
         self.opt = opt
@@ -105,7 +87,7 @@ class hkDetect:
 
         # Apply NMS
         pred = non_max_suppression(pred, opt.conf_thres, opt.iou_thres,
-                                   multi_label=False, classes=opt.classes, agnostic=opt.agnostic_nms)
+                                   multi_label=False, classes=opt.classes, agnostic=opt.agnostic_nms,detect_th = opt.confidence)
 
             # Process detections
 
@@ -129,6 +111,9 @@ class hkDetect:
             # list = []
 
                 for *xyxy, conf, cls in det:
+                        # if(self.names[int(cls)] is "good" and  conf<self.opt.confidence):
+
+
                         label = '%s %.2f' % (self.names[int(cls)], conf)    # 索引值对应的类别，置信度
                         xt,yt = plot_one_box(xyxy, im0, label=label, color=self.colors[int(cls)])
                         confidence = conf.item()

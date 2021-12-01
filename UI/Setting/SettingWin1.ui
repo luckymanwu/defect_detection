@@ -161,9 +161,6 @@
           <string>Train Setting</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_4">
-          <item row="0" column="1">
-           <widget class="QLineEdit" name="epoch_lineEdit"/>
-          </item>
           <item row="0" column="0">
            <widget class="QLabel" name="epoch_label">
             <property name="font">
@@ -188,24 +185,6 @@
             </property>
            </widget>
           </item>
-          <item row="2" column="0">
-           <widget class="QLabel" name="train_model_labe">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="font">
-             <font>
-              <pointsize>12</pointsize>
-             </font>
-            </property>
-            <property name="text">
-             <string>train model:</string>
-            </property>
-           </widget>
-          </item>
           <item row="2" column="1">
            <widget class="QRadioButton" name="semi_train">
             <property name="sizePolicy">
@@ -225,8 +204,29 @@
             </property>
            </widget>
           </item>
+          <item row="0" column="1">
+           <widget class="QLineEdit" name="epoch_lineEdit"/>
+          </item>
           <item row="1" column="1">
            <widget class="QLineEdit" name="batch_size_lineEdit"/>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="train_model_labe">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>12</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>train model:</string>
+            </property>
+           </widget>
           </item>
           <item row="2" column="2">
            <widget class="QRadioButton" name="normal_train">
@@ -264,33 +264,29 @@
           </font>
          </property>
          <property name="title">
-          <string>Skin Setting</string>
+          <string>Detection Setting</string>
          </property>
-         <widget class="QRadioButton" name="bright_radioButton">
+         <widget class="QWidget" name="">
           <property name="geometry">
            <rect>
-            <x>50</x>
-            <y>70</y>
-            <width>101</width>
-            <height>20</height>
+            <x>23</x>
+            <y>28</y>
+            <width>311</width>
+            <height>51</height>
            </rect>
           </property>
-          <property name="text">
-           <string>bright</string>
-          </property>
-         </widget>
-         <widget class="QRadioButton" name="dark_radioButton">
-          <property name="geometry">
-           <rect>
-            <x>210</x>
-            <y>70</y>
-            <width>101</width>
-            <height>20</height>
-           </rect>
-          </property>
-          <property name="text">
-           <string>dark</string>
-          </property>
+          <layout class="QHBoxLayout" name="horizontalLayout_4">
+           <item>
+            <widget class="QLabel" name="label">
+             <property name="text">
+              <string>confidence:</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QSpinBox" name="spinBox"/>
+           </item>
+          </layout>
          </widget>
         </widget>
        </item>

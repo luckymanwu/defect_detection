@@ -38,7 +38,7 @@ class Setting(SettingWin):
         self.initSetting()
 
     def initSetting(self):
-        self.dark_radioButton.setChecked(True)
+
         self.WidthMax_value_label.setText("2448")
         self.HeightMax_value_label.setText("2048")
         self.fps_value_label.setText("23.4")
@@ -78,7 +78,8 @@ class Setting(SettingWin):
             self.report_save_path = self.configuration.value("REPORT_SAVE_PATH")
             self.report_save_lineEdit.setText(os.path.abspath(self.report_save_path))
             self.train_model = self.configuration.value("TRAIN_MODEL")
-
+            self.confidence = self.configuration.value("CONFIDENCE")
+            self.spinBox.setValue(int(self.confidence))
             if self.train_model == "normal":
                 self.normal_train.setChecked(True)
             else:
@@ -116,7 +117,7 @@ class Setting(SettingWin):
         self.configuration.setValue("EPOCHS",self.epoch_lineEdit.text())
         self.configuration.setValue("BATCHSIZE", self.batch_size_lineEdit.text())
         self.configuration.setValue("MODEL_SAVE_PATH", self.model_save_lineEdit.text())
-
+        self.configuration.setValue("CONFIDENCE",self.spinBox.value())
         if self.normal_train.isChecked():
             train_model = "normal"
         else:

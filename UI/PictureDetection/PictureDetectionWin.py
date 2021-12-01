@@ -64,6 +64,7 @@ class PictureDetectionWin(QWidget):
         spacerItem = QtWidgets.QSpacerItem(40, 30, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.verticalLayout_3.addItem(spacerItem)
         self.model = QStandardItemModel(0, 2);
+
         self.model.setHorizontalHeaderLabels(['图片编号','缺陷类型'])
         self.resultView = QtWidgets.QTableView()
         self.resultView.setModel(self.model)

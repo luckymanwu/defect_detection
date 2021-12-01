@@ -1,5 +1,4 @@
 import cv2
-from matplotlib import pyplot as plt
 
 image = cv2.imread("C:\\Users\\Administrator\\Desktop\\a.bmp",0)
 image = cv2.resize(image, (image.shape[1]//4, image.shape[0]//4))

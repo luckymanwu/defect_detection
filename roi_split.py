@@ -3,6 +3,7 @@
 
 import cv2
 import numpy as np
+from PIL import Image
 
 THRESH_BINARY_VALUE = 180
 BLUR_KERNEL_SIZE = 5
@@ -10,27 +11,28 @@ AREA_THRESHOLD = 200
 MODE = 0
 
 
-def roi_split(img=None):
+def roi_split(imgdir=None):
     if MODE == 0:
         # 读入原始图像
-        # srcImage = cv2.imread(imgdir)
-        # if srcImage is None:
-        #     print("Failed to read source image.")
-        #     exit()
+        srcImage = cv2.imread(imgdir)
+        if srcImage is None:
+            print("Failed to read source image.")
+            exit()
 
-        srcImage = cv2.resize(img, None, fx=0.25, fy=0.25, interpolation=cv2.INTER_CUBIC)
+        srcImage = cv2.resize(srcImage, None, fx=0.25, fy=0.25, interpolation=cv2.INTER_CUBIC)
 
         # 分离rgb通道
         bChannel, gChannel, rChannel = cv2.split(srcImage)
         # 进行双边滤波
         bilateralImage = cv2.bilateralFilter(bChannel, BLUR_KERNEL_SIZE, 100, 15)
-        # 阈值化
-        _, binaryImage = cv2.threshold(bilateralImage, 95, 255, cv2.THRESH_BINARY_INV)
+        # 阈值化,大于阈值的使用0表示，小于阈值的使用最大值表示
+        _, binaryImage = cv2.threshold(bilateralImage, 170, 255, cv2.THRESH_TOZERO)
+
 
         # 闭运算,减少内部轮廓，避免多次检测
         kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (21, 7))
         binaryImage = cv2.morphologyEx(binaryImage, cv2.MORPH_CLOSE, kernel)
-        # cv2.imshow("binaryImage", binaryImage)
+
         # cv2.waitKey(-1)
         # # 寻找轮廓
         contours, hierarchy = cv2.findContours(binaryImage, cv2.RETR_CCOMP, cv2.CHAIN_APPROX_SIMPLE)
@@ -63,33 +65,27 @@ def roi_split(img=None):
                 if cropped.size == 0:
                     return srcImage
                 else:
-                    return cropped
-                    # print(imgdir)
-                    # cv2.imwrite(imgdir, cropped)
 
-        return srcImage
+                    print(imgdir)
+                    cv2.imwrite(imgdir, cropped)
 
 
 
 import os
-# img = cv2.imread("C:\\Users\\Administrator\\Desktop\\test1\\3.bmp")
-# roi_split(img)
-
-path = "C:\\Users\\Administrator\\Desktop\\cixinDataSet\\JPEGImages"
-# path = "C:\\Users\\Administrator\\Desktop\\0417.jpg"
-roi_split(path)
+path = "C:\\Users\\Administrator\\Desktop\\imgs"
 filelist = os.listdir(path)
-
+count = 1
 for file in filelist:
-     imgdir = os.path.join(path, file)
-     if os.path.isdir(imgdir):
-         continue
-     roi_split(imgdir)
+    Olddir = os.path.join(path, file)
+    if os.path.isdir(Olddir):
+        continue
 
-     filename = os.path.splitext(file)[0]
-     filetype = os.path.splitext(file)[1]
-     Newdir = os.path.join(path, str(count).zfill(4) + ".jpg")
-     os.rename(Olddir, Newdir)
+    filename = os.path.splitext(file)[0]
+    filetype = os.path.splitext(file)[1]
+    count += 1
+    Newdir = os.path.join(path, str(count).zfill(4) + ".jpg")
+    os.rename(Olddir, Newdir)
+
 
 
 

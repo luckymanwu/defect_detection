@@ -466,7 +466,7 @@ def build_targets(p, targets, model):
     return tcls, tbox, indices, anch
 
 
-def non_max_suppression(prediction, conf_thres=0.1, iou_thres=0.6, multi_label=True, classes=None, agnostic=False):
+def non_max_suppression(prediction, conf_thres=0.1, iou_thres=0.5, multi_label=True, classes=None, agnostic=False,detect_th=0.7):
     """
     Performs  Non-Maximum Suppression on inference results
     Returns detections with shape:
@@ -504,7 +504,17 @@ def non_max_suppression(prediction, conf_thres=0.1, iou_thres=0.6, multi_label=T
             i, j = (x[:, 5:] > conf_thres).nonzero().t()
             x = torch.cat((box[i], x[i, j + 5].unsqueeze(1), j.float().unsqueeze(1)), 1)
         else:  # best class only
+            #max(1)每一行的最大值,unsqueeze(1)升维度
             conf, j = x[:, 5:].max(1)
+            # conf_np = conf.cpu().detach().numpy()
+            # j_np = j.cpu().detach().numpy()
+            # if(j_np[0] == 0 and conf_np.max()<float(detect_th)/100):
+            #     print(detect_th)
+            #     print()
+            #     j = x[:, 5:].argsort(axis=1)[:,-2]
+            #     j_np = j.cpu().detach().numpy()
+            #     conf = x[:,5+j_np[0]]
+
             x = torch.cat((box, conf.unsqueeze(1), j.float().unsqueeze(1)), 1)[conf > conf_thres]
 
         # Filter by class

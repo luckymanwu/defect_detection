@@ -24,11 +24,11 @@ class PictureDetection(PictureDetectionWin):
         self.setStyleSheet(style)
         self.cwd = os.getcwd()  # 获取当前程序文件位置
         self.opt = Opt()
-
         self.opt.cfg = self.configuration.value('CFG_PATH')
         self.opt.output = self.configuration.value('SAVE_IMG_PATH')
         self.opt.weights = self.configuration.value('WEIGHTS_PATH')
         self.opt.names = self.configuration.value('SAVE_DATASET_PATH')+"\\rbc.names"
+        self.opt.confidence = self.configuration.value('CONFIDENCE')
         self.thread = PictureDetectThread(self.opt)
         self.open.clicked.connect(self.opne_file)
         self.start.clicked.connect(self.start_batch_detection)
@@ -96,7 +96,7 @@ class PictureDetection(PictureDetectionWin):
         self.cur_img_idx = self.cur_img_idx.row()
         filename = self.imgName[self.cur_img_idx]
         if filename:
-            height = 350*self.cur_img_idx
+            height = 360*self.cur_img_idx
             self.origin_scrollArea.verticalScrollBar().setSliderPosition(height)
             self.detection_scrollArea.verticalScrollBar().setSliderPosition(height)
 

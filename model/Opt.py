@@ -19,6 +19,7 @@ class Opt(object):
         self.save_txt=True
         self.view_img=False
         self.weights='../weights/best.pt'
-        self.epochs = 1000
+        self.epochs = 800
         self.batchSize = 16
+        self.confidence = 80
 

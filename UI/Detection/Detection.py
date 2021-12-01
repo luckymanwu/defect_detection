@@ -38,7 +38,7 @@ class Detection(DetectionWin):
         self.RedButton.clicked.connect(self.stop)
         self.BlueButton.clicked.connect(self.reset)
         self.grayButton.clicked.connect(lambda : self.Ticket.show())
-        com.open()
+
 
 
 
