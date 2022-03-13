@@ -22,6 +22,7 @@ class hkDetect:
         attempt_download(weights)
         if weights.endswith('.pt'):  # pytorch format
             self.model.load_state_dict(torch.load(weights, map_location=self.device)['model'])
+
             # model.load_state_dict(torch.load(weights, map_location='cpu'))
         else:  # darknet format
             load_darknet_weights(self.model, weights)

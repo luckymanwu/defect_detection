@@ -72,9 +72,9 @@ def roi_split(imgdir=None):
 
 
 import os
-path = "C:\\Users\\Administrator\\Desktop\\imgs"
+path = "C:\\Users\\Administrator\\Desktop\\缺陷\\粘底"
 filelist = os.listdir(path)
-count = 1
+count = 1063
 for file in filelist:
     Olddir = os.path.join(path, file)
     if os.path.isdir(Olddir):
@@ -84,7 +84,9 @@ for file in filelist:
     filetype = os.path.splitext(file)[1]
     count += 1
     Newdir = os.path.join(path, str(count).zfill(4) + ".jpg")
+    roi_split(Olddir)
     os.rename(Olddir, Newdir)
+    count+=1
 
 
 

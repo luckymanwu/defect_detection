@@ -2,8 +2,8 @@ import os
 import random
 
 def makext(imgpath,xmlfilepath,txtsavepath):
-        trainval_percent = 0.5
-        train_percent = 0.5
+        trainval_percent = 0.2
+        train_percent = 0.8
         total_xml = os.listdir(xmlfilepath)
         imgs = os.listdir(imgpath)
         num = len(total_xml)

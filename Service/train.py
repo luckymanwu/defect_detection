@@ -287,9 +287,6 @@ def train_init(hyp,opt):
                 ema.update(model)
 
             # visdom可视化train_loss
-            global_step += 1
-            viz.line([loss.item()], [global_step], win='train_loss',
-                     update='append',opts=dict(x_lable='iteration',y_lable='loss'))
 
             # Print
             mloss = (mloss * i + loss_items) / (i + 1)  # update mean losses

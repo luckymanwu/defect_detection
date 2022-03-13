@@ -4,7 +4,7 @@
 # mkdir -p weights && cd weights
 
 # copy darknet weight files, continue '-c' if partially downloaded
-# wget -c https://pjreddie.com/media/files/yolov3.weights
+ wget -c https://pjreddie.com/media/files/yolov3.weights
 # wget -c https://pjreddie.com/media/files/yolov3-tiny.weights
 # wget -c https://pjreddie.com/media/files/yolov3-spp.weights
 
@@ -19,6 +19,6 @@
 # mv yolov3-tiny.conv.15 ../
 
 # new method
-python3 -c "from models import *;
-attempt_download('weights/yolov3.pt');
-attempt_download('weights/yolov3-spp.pt')"
+#python3 -c "from models import *;
+#attempt_download('weights/yolov3.pt');
+#attempt_download('weights/yolov3-spp.pt')"
