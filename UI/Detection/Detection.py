@@ -75,8 +75,9 @@ class Detection(DetectionWin):
         elif(len(camera.imgs)):
             camera.detect_num+=1
             select_img = camera.imgs[int(len(camera.imgs)/2)]
-            result_image,defect_type = self.hkDetect.detect(select_img, self.opt)
-            if("ok" in defect_type ):
+            result_image,defect_classes = self.hkDetect.detect(select_img, self.opt)
+
+            if(len(defect_classes)==1 | "ok" in defect_classes ):
                 camera.good_num+=1
                 self.cameraResultLabels[camNo].setStyleSheet("color:green;font-size:14px")
             else:
@@ -85,6 +86,7 @@ class Detection(DetectionWin):
             result_image = QtGui.QImage(result_image.data, result_image.shape[1], result_image.shape[0],
                                     QtGui.QImage.Format_RGB888)  # 把读取到的视频数据变成QImage形式
             self.cameraDetectionLabels[camNo].setPixmap(QtGui.QPixmap.fromImage(result_image))
+            defect_type = ''.join(defect_classes)
             self.cameraResultLabels[camNo].setText(defect_type)
             row = int(camNo)-1
             self.model.setItem(row,1, QStandardItem(str(camera.detect_num)))
