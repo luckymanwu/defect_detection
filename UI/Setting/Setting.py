@@ -47,7 +47,7 @@ class Setting(SettingWin):
              self.batch_size_lineEdit.setText("4")
              self.carmer_one.setChecked(True)
              self.camList.append("1")
-             self.dark_radioButton.setChecked(True)
+             # self.dark_radioButton.setChecked(True)
              self.weights_path = "../weights/best.pt"
              self.weights_lineEdit.setText(os.path.abspath(self.weights_path))
              self.save_img_path = "../output/Image"
@@ -58,8 +58,10 @@ class Setting(SettingWin):
              self.dataSet_lineEdit.setText(os.path.abspath(self.dataSet_path))
              self.report_save_path="../output"
              self.report_save_lineEdit.setText(os.path.abspath(self.report_save_path))
-             self.fps_LineEdit.setText("23.1400")
-             self.normal_train.setChecked()
+             # self.fps_LineEdit.setText("23.1400")
+             self.fps_value_label.setText("23.1400")
+             self.normal_train.setChecked(True)
+             # self.normal_train.setChecked()
              self.Width_spinBox.setValue(400)
              self.Height_spinBox.setValue(360)
         else:

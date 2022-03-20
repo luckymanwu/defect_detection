@@ -11,6 +11,7 @@ from PyQt5.QtGui import  QPalette, QColor
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QWidget
 
+
 class SettingWin(QWidget):
     def setupUi(self, Setting):
         Setting.setObjectName("Setting")
