@@ -3,14 +3,14 @@ import time
 import os
 from PyQt5 import QtCore, QtWidgets, QtGui
 from PyQt5.QtGui import QIcon, QPixmap, QStandardItem
-from UI.Detection.D2 import DetectionWin
+from UI.Detection.DetectionWin import DetectionWin
 from UI.Setting.Setting import Setting
 from utils.CommonHelper import CommonHelper
 from hkDetect import hkDetect
 import numpy as np
 import cv2
-from Opt import Opt
-from utils.Camera import Camera
+from model.Opt import Opt
+from model.Camera import Camera
 
 from  MvCameraControl_class import *
 winfun_ctype = WINFUNCTYPE
@@ -23,7 +23,7 @@ class Detection(DetectionWin):
     def __init__(self,configuration):
         super(Detection,self).__init__()
         self.setupUi(self)
-        styleFile = '../resource/Detection.qss'
+        styleFile = '../../resource/Detection.qss'
         # 换肤时进行全局修改，只需要修改不同的QSS文件即可
         style = CommonHelper.readQss(styleFile)
         self.setStyleSheet(style)

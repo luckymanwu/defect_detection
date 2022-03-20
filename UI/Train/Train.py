@@ -67,7 +67,7 @@ class Train(TrainWin):
     def __init__(self,configuration=None):
         super(Train, self).__init__()
         self.setupUi(self)
-        styleFile = '../resource/Train.qss'
+        styleFile = '../../resource/Train.qss'
         # 换肤时进行全局修改，只需要修改不同的QSS文件即可
         style = CommonHelper.readQss(styleFile)
         self.setStyleSheet(style)

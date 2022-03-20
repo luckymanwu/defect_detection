@@ -26,7 +26,7 @@ class Annotation(AnnotationWin):
     def __init__(self,configuration=None,default_filename =None):
         super(Annotation, self).__init__()
         self.setupUi(self)
-        styleFile = '../resource/Annotation.qss'
+        styleFile = '../../resource/Annotation.qss'
         # 换肤时进行全局修改，只需要修改不同的QSS文件即可
         style = CommonHelper.readQss(styleFile)
         self.setStyleSheet(style)
