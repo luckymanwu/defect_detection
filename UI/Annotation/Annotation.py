@@ -65,7 +65,7 @@ class Annotation(AnnotationWin):
         # Whether we need to save or not.
         self.dirty = False
         self.label_file_format =LabelFileFormat.PASCAL_VOC
-        self.default_save_dir = self.configuration.value('SAVE_DATASET_PATH')+'/Annotations/'
+        self.default_save_dir = str(self.configuration.value('SAVE_DATASET_PATH'))+'/Annotations/'
         self.file_path = ustr(default_filename)
         self.deleteBox.clicked.connect(self.delete_selected_shape)
         self.canvas.drawingPolygon.connect(self.toggle_drawing_sensitive)

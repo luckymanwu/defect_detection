@@ -27,7 +27,7 @@ class PictureDetection(PictureDetectionWin):
         self.opt.cfg = self.configuration.value('CFG_PATH')
         self.opt.output = self.configuration.value('SAVE_IMG_PATH')
         self.opt.weights = self.configuration.value('WEIGHTS_PATH')
-        self.opt.names = self.configuration.value('SAVE_DATASET_PATH')+'\rbc.names'
+        self.opt.names = str(self.configuration.value('SAVE_DATASET_PATH'))+'\rbc.names'
         self.opt.confidence = self.configuration.value('CONFIDENCE')
         self.thread = PictureDetectThread(self.opt)
         self.open.clicked.connect(self.opne_file)

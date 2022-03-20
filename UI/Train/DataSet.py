@@ -6,7 +6,7 @@ from utils.CommonHelper import CommonHelper
 class DataSet(DataSetWin):
     def __init__(self, parent=None,dataSetPath=None):
         super(DataSet, self).__init__(parent)
-        styleFile = 'E:\defect_detection-main/resource/Ticket.qss'
+        styleFile = '../../resource/Ticket.qss'
         # 换肤时进行全局修改，只需要修改不同的QSS文件即可
         style = CommonHelper.readQss(styleFile)
         self.setStyleSheet(style)

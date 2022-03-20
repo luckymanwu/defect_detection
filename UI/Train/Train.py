@@ -96,7 +96,7 @@ class Train(TrainWin):
     def chartViewInit(self,title):
         self.chart = QChart()
         self.chart.setTitleBrush(QBrush(Qt.black))
-        self.chart.setTitle("训练模式: "+title)
+        self.chart.setTitle("训练模式: "+str(title))
         self.series = QSplineSeries()
         self.series.setName("Loss")
         self.series.append(QPointF(0, 0))
