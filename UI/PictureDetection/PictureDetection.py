@@ -16,7 +16,7 @@ class PictureDetection(PictureDetectionWin):
     def __init__(self,configuration):
         super(PictureDetection, self).__init__()
         self.setupUi(self)
-        styleFile = '../resource/PictureDetection.qss'
+        styleFile = '../../resource/PictureDetection.qss'
         # 换肤时进行全局修改，只需要修改不同的QSS文件即可
         style = CommonHelper.readQss(styleFile)
         self.imgName=[]
@@ -27,7 +27,7 @@ class PictureDetection(PictureDetectionWin):
         self.opt.cfg = self.configuration.value('CFG_PATH')
         self.opt.output = self.configuration.value('SAVE_IMG_PATH')
         self.opt.weights = self.configuration.value('WEIGHTS_PATH')
-        self.opt.names = self.configuration.value('SAVE_DATASET_PATH')+"\\rbc.names"
+        self.opt.names = str(self.configuration.value('SAVE_DATASET_PATH'))+"\\rbc.names"
         self.opt.confidence = self.configuration.value('CONFIDENCE')
         self.thread = PictureDetectThread(self.opt)
         self.open.clicked.connect(self.opne_file)
@@ -120,7 +120,7 @@ class PictureDetectThread(QThread):
             imgs.append(img)
         for i in range(len(imgs)):
             img = imgs[i]
-            result_image, defect_classes = self.hkDetect.detect(img, self.opt)
+            result_image, defect_classes = self.hkDetect.detect(img, self.opt,self.configuration)
             img_name = self.imgName[i]
             self.show_picture_signal.emit(i,result_image)
             if (len(defect_classes)>=2 or "good" not in defect_classes):

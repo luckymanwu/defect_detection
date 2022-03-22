@@ -11,6 +11,7 @@ from PyQt5.QtGui import  QPalette, QColor
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QWidget
 
+
 class SettingWin(QWidget):
     def setupUi(self, Setting):
         Setting.setObjectName("Setting")
@@ -226,6 +227,28 @@ class SettingWin(QWidget):
         self.Height_spinBox.setObjectName("Height_spinBox")
         self.gridLayout_3.addWidget(self.Height_spinBox, 3, 1, 1, 1)
         self.horizontalLayout_3.addWidget(self.Image_Format_Control)
+
+        self.th1_label = QtWidgets.QLabel(self.Image_Format_Control)
+        font = QtGui.QFont()
+        font.setPointSize(14)
+        self.th1_label.setFont(font)
+        self.th1_label.setObjectName("th1_label")
+        self.gridLayout_3.addWidget(self.th1_label, 4, 0, 1, 1)
+        self.th1_spinBox = QtWidgets.QSpinBox(self.Image_Format_Control)
+        self.th1_spinBox.setObjectName("th1_spinBox")
+        self.gridLayout_3.addWidget(self.th1_spinBox, 4, 1, 1, 1)
+        # self.horizontalLayout_3.addWidget(self.Image_Format_Control)
+        self.th2_label = QtWidgets.QLabel(self.Image_Format_Control)
+        font = QtGui.QFont()
+        font.setPointSize(14)
+        self.th2_label.setFont(font)
+        self.th2_label.setObjectName("th2_label")
+        self.gridLayout_3.addWidget(self.th2_label, 5, 0, 1, 1)
+        self.th2_spinBox = QtWidgets.QSpinBox(self.Image_Format_Control)
+        self.th2_spinBox.setObjectName("th2_spinBox")
+        self.gridLayout_3.addWidget(self.th2_spinBox, 5, 1, 1, 1)
+        # self.horizontalLayout_3.addWidget(self.Image_Format_Control)
+
         self.horizontalLayout_3.setStretch(0, 2)
         self.horizontalLayout_3.setStretch(1, 3)
         self.horizontalLayout_3.setStretch(2, 2)
@@ -323,7 +346,6 @@ class SettingWin(QWidget):
         self.model_save_lineEdit.setObjectName("model_save_lineEdit")
         self.gridLayout_2.addWidget(self.model_save_lineEdit, 4, 1, 1, 1)
 
-
         self.model_save_path_open = QtWidgets.QPushButton(self.model_setting)
         self.model_save_path_open.setMinimumSize(QtCore.QSize(0, 35))
         font = QtGui.QFont()
@@ -397,6 +419,10 @@ class SettingWin(QWidget):
         self.HeightMax_label.setText(_translate("Setting", " HeightMax："))
         self.Width_label.setText(_translate("Setting", " Width："))
         self.Height_label.setText(_translate("Setting", " Height:"))
+
+        self.th1_label.setText(_translate("Setting", " th1："))
+        self.th2_label.setText(_translate("Setting", " th2:"))
+
         self.model_setting.setTitle(_translate("Setting", "Model Setting"))
         self.weights_label.setText(_translate("Setting", "import model weights:"))
         self.weights_upload.setText(_translate("Setting", "upload"))

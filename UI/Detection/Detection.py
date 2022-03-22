@@ -23,7 +23,7 @@ class Detection(DetectionWin):
     def __init__(self,configuration):
         super(Detection,self).__init__()
         self.setupUi(self)
-        styleFile = '../resource/Detection.qss'
+        styleFile = '../../resource/Detection.qss'
         # 换肤时进行全局修改，只需要修改不同的QSS文件即可
         style = CommonHelper.readQss(styleFile)
         self.setStyleSheet(style)

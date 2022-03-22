@@ -16,7 +16,7 @@ class LeftTabWidget(QWidget):
          super(LeftTabWidget, self).__init__()
          self.setObjectName('LeftTabWidget')
          self.setWindowTitle('LeftTabWidget')
-         with open('../resource/leftTab.qss', 'r', encoding='utf-8') as f:   #导入QListWidget的qss样式
+         with open('../../resource/leftTab.qss', 'r', encoding='utf-8') as f:   #导入QListWidget的qss样式
              self.list_style = f.read()
          self.main_layout = QHBoxLayout(self, spacing=0)     #窗口的整体布局
          self.main_layout.setContentsMargins(0,0,0,0)
