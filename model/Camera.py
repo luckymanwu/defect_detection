@@ -25,11 +25,12 @@ class Camera(QObject):
     def __init__(self,camNo,opt,slot):
         super(Camera, self).__init__()
         self.camNo = camNo
+        # self.show_picture_signal = pyqtSignal(object, object, object)
         self.detect_num = 0
         self.bad_num = 0
         self.good_num = 0
         self.defectStatistic={}
-        self.defectStatistic_init(opt.names)
+        lambda :self.defectStatistic_init(opt.names)
         self.speedValue=0.0
         self.ratio = 0.0
         self.opt = opt
@@ -78,8 +79,6 @@ class Camera(QObject):
             print("set trigger mode fail! ret[0x%x]" % ret)
             sys.exit()
 
-        ret = self.cam.MV_CC_SetEnumValue("TriggerDelay",  515000)
-        ret = self.cam.MV_CC_SetEnumValue("ExposureTime", 2400)
         ret = self.cam.MV_CC_SetEnumValue("Gain",2)
 
         # ch:获取数据包大小 | en:Get payload size
@@ -142,12 +141,11 @@ class Camera(QObject):
                 # ret, image = cv2.threshold(image, 45, 255, cv2.THRESH_TOZERO_INV)
                 image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
                 originalshow = roi_split(image)
-                print(originalshow.shape)
                 # image = cv2.resize(image, (self.opt.width, self.opt.height))
                 # ret, image = cv2.threshold(image, 45, 255, cv2.THRESH_TOZERO_INV)
                 # originalshow = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
                 detected_image, defect_type = self.hkDetect.detect(originalshow, self.opt)
-                cv2.imwrite("./"+str(self.detect_num)+".jpg",detected_image)
+                # cv2.imwrite("./"+str(self.detect_num)+".jpg",detected_image)
                 print(detected_image.shape)
                 print(defect_type)
                 if ("good" in defect_type):
@@ -156,10 +154,10 @@ class Camera(QObject):
                     self.bad_num+=1
 
                 if(defect_type is not ''):
-                    self.defectStatistic[defect_type] =  self.defectStatistic[defect_type]+1
+                    # self.defectStatistic[defect_type] =  self.defectStatistic[defect_type]+1
                     self.show_picture_signal.emit(detected_image,defect_type,camNo)
-                    nums = [self.detect_num,self.good_num,self.bad_num]
-                    self.show_detect_info.emit(nums,camNo)
+                    # nums = [self.detect_num,self.good_num,self.bad_num]
+                    # self.show_detect_info.emit(nums,camNo)
             else:
                 print("no data[0x%x]" % ret)
             if self.g_bExit == True:

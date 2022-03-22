@@ -120,11 +120,12 @@ class PictureDetectThread(QThread):
             imgs.append(img)
         for i in range(len(imgs)):
             img = imgs[i]
-            result_image, defect_type = self.hkDetect.detect(img, self.opt)
+            result_image, defect_classes = self.hkDetect.detect(img, self.opt)
             img_name = self.imgName[i]
             self.show_picture_signal.emit(i,result_image)
-            if ("good" not in defect_type):
+            if (len(defect_classes)>=2 or "good" not in defect_classes):
                 self.badNum += 1
+            defect_type = " ".join(defect_classes)
             self.addItem_signal.emit(img_name,defect_type)
         self.show_total_signal.emit(imgs,self.badNum)
 

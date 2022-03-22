@@ -14,7 +14,7 @@ class Opt(object):
         self.half=False
         self.img_size=512
         self.iou_thres=0.6
-        self.names = 'C:/Users/Administrator/Desktop/cixinDataSet/rbc.names'
+        self.names = 'C:/Users/Administrator/Desktop/cxData/rbc.names'
         self.output='../output'
         self.save_txt=True
         self.view_img=False

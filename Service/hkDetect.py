@@ -124,7 +124,7 @@ class hkDetect:
 
         # 粘底检测
         if(self.canny_detect(image0)):
-            defect_class.append("粘底")
+            defect_class.append("底面刮花")
 
         return im0,defect_class
 
