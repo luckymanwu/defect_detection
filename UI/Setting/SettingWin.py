@@ -237,7 +237,7 @@ class SettingWin(QWidget):
         self.th1_spinBox = QtWidgets.QSpinBox(self.Image_Format_Control)
         self.th1_spinBox.setObjectName("th1_spinBox")
         self.gridLayout_3.addWidget(self.th1_spinBox, 4, 1, 1, 1)
-        self.horizontalLayout_3.addWidget(self.Image_Format_Control)
+        # self.horizontalLayout_3.addWidget(self.Image_Format_Control)
         self.th2_label = QtWidgets.QLabel(self.Image_Format_Control)
         font = QtGui.QFont()
         font.setPointSize(14)
@@ -247,7 +247,7 @@ class SettingWin(QWidget):
         self.th2_spinBox = QtWidgets.QSpinBox(self.Image_Format_Control)
         self.th2_spinBox.setObjectName("th2_spinBox")
         self.gridLayout_3.addWidget(self.th2_spinBox, 5, 1, 1, 1)
-        self.horizontalLayout_3.addWidget(self.Image_Format_Control)
+        # self.horizontalLayout_3.addWidget(self.Image_Format_Control)
 
         self.horizontalLayout_3.setStretch(0, 2)
         self.horizontalLayout_3.setStretch(1, 3)
