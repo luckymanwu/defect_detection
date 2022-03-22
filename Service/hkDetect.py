@@ -3,9 +3,18 @@
 from Service.models import *  # set ONNX_EXPORT in models.py
 from project.datasets import *
 from project.utils import *
+from SettingWin import *
+from Setting import *
+import os
+from UI.Setting.SettingWin import SettingWin
+from utils.CommonHelper import CommonHelper
+from PyQt5.QtCore import QSettings, pyqtSignal
+from PyQt5.QtWidgets import QFileDialog
+from  MvCameraControl_class import *
+
 BLUR_KERNEL_SIZE = 5
 class hkDetect:
-    def __init__(self,opt=None):
+    def __init__(self,configuration,opt=None):
         self.opt = opt
         self.init_model(opt)
 
@@ -68,7 +77,7 @@ class hkDetect:
         img = torch.zeros((1, 3, imgsz, imgsz), device=self.device)  # init img
         _ = self.model(img.half() if half else img.float()) if self.device.type != 'cpu' else None  # run once
 
-    def detect(self,image0,opt=None):
+    def detect(self,image0,configuration,opt=None):
         image = letterbox(image0, new_shape=416)[0]
         defect_class=[]
         confidence=0
@@ -119,17 +128,18 @@ class hkDetect:
                         xy = xyxy[0].item()
 
         # 杂质检测
-        if (self.zazhi_detect(image0)):
+        if (self.zazhi_detect(image0,configuration)):
             defect_class.append("杂质")
 
         # 粘底检测
-        if(self.canny_detect(image0)):
+        if(self.canny_detect(image0,configuration)):
             defect_class.append("底面刮花")
 
         return im0,defect_class
 
 
-    def zazhi_detect(self,image):
+    def zazhi_detect(self,image,configuration):
+        th1 = int(configuration.value("Zazhi_th"))*255/100
         gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
         bilateralImage = cv2.bilateralFilter(gray, BLUR_KERNEL_SIZE, 100, 15)
         p, q = gray.shape
@@ -153,7 +163,7 @@ class hkDetect:
         b = np.median(lst2)
         # print(lst2)
         # print(b)
-        if b < 110:
+        if b < th1:
             ret, binary = cv2.threshold(gray, b - 45, 255, cv2.THRESH_BINARY_INV)
         else:
             ret, binary = cv2.threshold(gray, b - 40, 255, cv2.THRESH_BINARY_INV)
@@ -171,16 +181,21 @@ class hkDetect:
             return False
 
 
-    def canny_detect(self,img):
+    def canny_detect(self,img,configuration):
+
+        th1=int(configuration.value("Canny_th"))*100
         img_gray = cv2.cvtColor(img,cv2.COLOR_RGB2GRAY)
         img_gauss = cv2.GaussianBlur(img_gray, (3, 3), 0)
         img_canny = cv2.Canny(img_gauss, 250, 20, 3)
         n = len(img_canny[img_canny == 255])  # 统计图片白点数量
-        if n > 4500:  # 白色像素值大于4500则判断为缺陷
+
+        if n > th1:  # 白色像素值大于4500则判断为缺陷
            return True
         else:
             return False
         # print(len(img_canny[img_canny == 255]))
+
+
 
 # test
 # if __name__ == '__main__':
@@ -190,6 +205,8 @@ class hkDetect:
 #         print("杂质")
 #     else:
 #         print("没问题")
+# test
+
 
 
 

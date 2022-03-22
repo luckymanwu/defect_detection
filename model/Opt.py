@@ -22,4 +22,7 @@ class Opt(object):
         self.epochs = 800
         self.batchSize = 16
         self.confidence = 80
+        self.Canny_th = 50
+        self.Zhazi_tj = 43
+
 

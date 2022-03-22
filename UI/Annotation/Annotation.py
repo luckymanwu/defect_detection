@@ -26,7 +26,7 @@ class Annotation(AnnotationWin):
     def __init__(self,configuration=None,default_filename =None):
         super(Annotation, self).__init__()
         self.setupUi(self)
-        styleFile = '../resource/Annotation.qss'
+        styleFile = '../../resource/Annotation.qss'
         # 换肤时进行全局修改，只需要修改不同的QSS文件即可
         style = CommonHelper.readQss(styleFile)
         self.setStyleSheet(style)
@@ -65,7 +65,7 @@ class Annotation(AnnotationWin):
         # Whether we need to save or not.
         self.dirty = False
         self.label_file_format =LabelFileFormat.PASCAL_VOC
-        self.default_save_dir = self.configuration.value('SAVE_DATASET_PATH')+'/Annotations/'
+        self.default_save_dir = str(self.configuration.value('SAVE_DATASET_PATH'))+'/Annotations/'
         self.file_path = ustr(default_filename)
         self.deleteBox.clicked.connect(self.delete_selected_shape)
         self.canvas.drawingPolygon.connect(self.toggle_drawing_sensitive)

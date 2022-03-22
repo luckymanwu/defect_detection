@@ -11,7 +11,7 @@ class Setting(SettingWin):
     def __init__(self,configuration):
         super(Setting, self).__init__()
         self.setupUi(self)
-        styleFile = '../resource/Setting.qss'
+        styleFile = '../../resource/Setting.qss'
         # 换肤时进行全局修改，只需要修改不同的QSS文件即可
         style = CommonHelper.readQss(styleFile)
         self.setStyleSheet(style)
@@ -42,12 +42,12 @@ class Setting(SettingWin):
         self.WidthMax_value_label.setText("2448")
         self.HeightMax_value_label.setText("2048")
         self.fps_value_label.setText("23.4")
-        if not os.path.exists('./config.ini'):
+        if not os.path.exists('../config.ini'):
              self.epoch_lineEdit.setText("1000")
              self.batch_size_lineEdit.setText("4")
              self.carmer_one.setChecked(True)
              self.camList.append("1")
-             self.dark_radioButton.setChecked(True)
+             #self.dark_radioButton.setChecked(True)
              self.weights_path = "../weights/best.pt"
              self.weights_lineEdit.setText(os.path.abspath(self.weights_path))
              self.save_img_path = "../output/Image"
@@ -58,10 +58,12 @@ class Setting(SettingWin):
              self.dataSet_lineEdit.setText(os.path.abspath(self.dataSet_path))
              self.report_save_path="../output"
              self.report_save_lineEdit.setText(os.path.abspath(self.report_save_path))
-             self.fps_LineEdit.setText("23.1400")
-             self.normal_train.setChecked()
+             #self.fps_LineEdit.setText("23.1400")
+             #self.normal_train.setChecked()
              self.Width_spinBox.setValue(400)
              self.Height_spinBox.setValue(360)
+             self.th1_spinBox.setValue(80)
+             self.th2_spinBox.setValue(43)
         else:
             self.epoch_lineEdit.setText(self.configuration.value("EPOCH"))
             self.batch_size_lineEdit.setText(self.configuration.value("BATCHSIZE"))
@@ -79,7 +81,13 @@ class Setting(SettingWin):
             self.report_save_lineEdit.setText(os.path.abspath(self.report_save_path))
             self.train_model = self.configuration.value("TRAIN_MODEL")
             self.confidence = self.configuration.value("CONFIDENCE")
+            self.cannyth = self.configuration.value("Canny_th")
+            self.zzth = self.configuration.value("Zazhi_th")
             self.spinBox.setValue(int(self.confidence))
+
+            self.th1_spinBox.setValue(int(self.cannyth))
+            self.th2_spinBox.setValue(int(self.zzth))
+
             if self.train_model == "normal":
                 self.normal_train.setChecked(True)
             else:
@@ -118,6 +126,8 @@ class Setting(SettingWin):
         self.configuration.setValue("BATCHSIZE", self.batch_size_lineEdit.text())
         self.configuration.setValue("MODEL_SAVE_PATH", self.model_save_lineEdit.text())
         self.configuration.setValue("CONFIDENCE",self.spinBox.value())
+        self.configuration.setValue("Canny_th", self.th1_spinBox.value())
+        self.configuration.setValue("Zazhi_th", self.th2_spinBox.value())
         if self.normal_train.isChecked():
             train_model = "normal"
         else:

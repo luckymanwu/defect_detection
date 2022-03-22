@@ -67,7 +67,7 @@ class Train(TrainWin):
     def __init__(self,configuration=None):
         super(Train, self).__init__()
         self.setupUi(self)
-        styleFile = '../resource/Train.qss'
+        styleFile = '../../resource/Train.qss'
         # 换肤时进行全局修改，只需要修改不同的QSS文件即可
         style = CommonHelper.readQss(styleFile)
         self.setStyleSheet(style)
@@ -96,7 +96,7 @@ class Train(TrainWin):
     def chartViewInit(self,title):
         self.chart = QChart()
         self.chart.setTitleBrush(QBrush(Qt.black))
-        self.chart.setTitle("训练模式: "+title)
+        self.chart.setTitle("训练模式: "+str(title))
         self.series = QSplineSeries()
         self.series.setName("Loss")
         self.series.append(QPointF(0, 0))

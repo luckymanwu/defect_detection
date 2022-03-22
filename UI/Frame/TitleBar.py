@@ -16,7 +16,7 @@ class TitleBar(QWidget):
     windowMoved = pyqtSignal(QPoint)
     def __init__(self, *args, **kwargs):
           super(TitleBar, self).__init__(*args, **kwargs)
-          styleFile = 'E:/defect_detection-main/resource/TitleBar.qss'
+          styleFile = '../../resource/TitleBar.qss'
           # 换肤时进行全局修改，只需要修改不同的QSS文件即可
           style = CommonHelper.readQss(styleFile)
           self.setStyleSheet(style)

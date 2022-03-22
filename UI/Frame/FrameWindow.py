@@ -12,6 +12,7 @@ Left, Top, Right, Bottom, LeftTop, RightTop, LeftBottom, RightBottom = range(8)
 from PyQt5.QtWidgets import QDesktopWidget
 
 
+
 class FramelessWindow(QWidget):
      # 四周边距
      Margins = 5
@@ -222,7 +223,7 @@ class MainWindow(QWidget):
          super(MainWindow, self).__init__(*args, **kwargs)
          layout = QVBoxLayout(self, spacing=0)
          layout.setContentsMargins(0, 0, 0, 0)
-         configuration = QSettings('config.ini', QSettings.IniFormat)
+         configuration = QSettings('../config.ini', QSettings.IniFormat)
          configuration.setIniCodec('UTF-8')  # 设置ini文件编码为 UTF-8
          self.left_tag = LeftTabWidget(configuration)
          layout.addWidget(self.left_tag)
