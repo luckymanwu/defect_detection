@@ -281,7 +281,7 @@
      <x>440</x>
      <y>40</y>
      <width>411</width>
-     <height>91</height>
+     <height>121</height>
     </rect>
    </property>
    <property name="font">
@@ -295,36 +295,80 @@
    <property name="title">
     <string>Acquisition Control</string>
    </property>
-   <widget class="QWidget" name="layoutWidget">
+   <widget class="QLabel" name="bright_value_label">
     <property name="geometry">
      <rect>
-      <x>11</x>
-      <y>26</y>
-      <width>391</width>
-      <height>41</height>
+      <x>240</x>
+      <y>60</y>
+      <width>54</width>
+      <height>12</height>
      </rect>
     </property>
-    <layout class="QHBoxLayout" name="horizontalLayout">
-     <item>
-      <widget class="QLabel" name="fps_label">
-       <property name="font">
-        <font>
-         <pointsize>12</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>Acquisition Frame Rate(Fps):</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="fps_value_label">
-       <property name="text">
-        <string/>
-       </property>
-      </widget>
-     </item>
-    </layout>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="fps_label_3">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>61</y>
+      <width>131</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Base Brightness:</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="fps_value_label_3">
+    <property name="geometry">
+     <rect>
+      <x>150</x>
+      <y>62</y>
+      <width>51</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="fps_label">
+    <property name="geometry">
+     <rect>
+      <x>12</x>
+      <y>27</y>
+      <width>221</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Acquisition Frame Rate(Fps):</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="fps_value_label">
+    <property name="geometry">
+     <rect>
+      <x>242</x>
+      <y>29</y>
+      <width>41</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
    </widget>
   </widget>
   <widget class="QGroupBox" name="Image_Format_Control">

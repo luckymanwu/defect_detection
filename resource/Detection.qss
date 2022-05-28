@@ -55,13 +55,13 @@ QPushButton#grayButton {
     margin: 4px 2px;
     color: white;
 }
-QPushButton#RedButton:hover,#GreenButton:hover,#BlueButton,#grayButton:hover {
+QPushButton#RedButton:hover,#GreenButton:hover,#BlueButton:hover,#grayButton:hover {
     background-color: white;
     border: 2px solid #f44336;
     color: black;
 }
 
-QPushButton#RedButton:pressed,#GreenButton:pressed,#BlueButton,#grayButton:pressed {
+QPushButton#RedButton:pressed,#GreenButton:pressed,#BlueButton:pressed,#grayButton:pressed {
     background-color: #06AD56;
 }
 

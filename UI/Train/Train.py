@@ -22,7 +22,7 @@ from model.Opt import Opt
 from project.datasets import *
 from project.utils import *
 from UI.Train.DataSet import DataSet
-from UI.Train.TrainWin1 import TrainWin
+from UI.Train.TrainWin import TrainWin
 from model.trainOpt import trainOpt
 from model.Camera import Camera
 from utils.CommonHelper import CommonHelper
@@ -116,10 +116,12 @@ class Train(TrainWin):
 
     def startSample(self):
         self.tabWidget.setCurrentIndex(0)
-        speed = com.get_data(50)
-        # timeout = int(75.0 / float(speed))
         for camNo in self.configuration.value('CAM_LIST'):
-            cam = Camera(camNo, Opt(), 2)
+            opt = Opt()
+            # opt.cfg = self.configuration.value("CFG_PATH")
+            # opt.output = self.configuration.value("SAVE_IMG_PATH")
+            # opt.weights = self.configuration.value("WEIGHTS_PATH")
+            cam = Camera(camNo, opt, 0)
             cam.sample_signal.connect(self.image_save)
             self.cams.update({camNo: cam})
             cam.openCam()
@@ -208,18 +210,25 @@ class Train(TrainWin):
         self.progressBar.setValue(progressValue)
         # self.progressBar.setProperty("value", progressValue)
 
-    def image_save(self,image,camNo):
+    def image_save(self,image,camNo,bright):
+
         img_path = self.configuration.value("SAVE_IMG_PATH")
         if(self.num == 0):
             path_file_number = glob.glob(img_path+'/*.jpg')
             self.file_num = len(path_file_number)
-        print(self.file_num)
+        # print(self.file_num)
         self.num+=1
-        cv2.imwrite(img_path + os.path.sep + str(self.num + self.file_num) + ".jpg", image)
-        image = QtGui.QImage(image.data, image.shape[1], image.shape[0],
+        # cv2.imwrite(img_path + os.path.sep + str(self.num + self.file_num) + ".jpg", image)
+        image = cv2.resize(image, (369, 440))
+        cv2.imwrite('11a.jpg', image)
+        image = QtGui.QImage(image.data,image.shape[0], image.shape[1],
                                     QtGui.QImage.Format_RGB888)  # 把读取到的视频数据变成QImage形式
+
+        self.cameras[camNo].setAlignment(Qt.AlignCenter)
         self.cameras[camNo].setPixmap(QtGui.QPixmap.fromImage(image))
+
         self.sample_num_label.setText("采样数："+str(self.num))
+        self.bright_label.setText("图片亮度：" + str(round(bright,3)))
 
 
 class SemiTrainThread(QThread):

@@ -42,6 +42,8 @@ class Setting(SettingWin):
         self.WidthMax_value_label.setText("2448")
         self.HeightMax_value_label.setText("2048")
         self.fps_value_label.setText("23.4")
+        self.bright_value_label.setText("193")
+        self.contrast_value_label.setText("0.62")
         if not os.path.exists('./config.ini'):
              self.epoch_lineEdit.setText("1000")
              self.batch_size_lineEdit.setText("4")

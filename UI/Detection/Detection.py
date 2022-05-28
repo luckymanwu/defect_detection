@@ -27,6 +27,10 @@ class Detection(DetectionWin):
         # 换肤时进行全局修改，只需要修改不同的QSS文件即可
         style = CommonHelper.readQss(styleFile)
         self.setStyleSheet(style)
+        self.detect_num = 0
+        self.good_num = 0
+        self.bad_num = 0
+        self.bad_ratio = 0
         self.cams={}
         self.configuration = configuration
         self.g_bExit = False
@@ -35,69 +39,104 @@ class Detection(DetectionWin):
         self.GreenButton.clicked.connect(self.detect)
         self.RedButton.clicked.connect(self.stop)
         self.BlueButton.clicked.connect(self.reset)
+        self.result = open('E:\\defect_detection-main\\result.txt', 'w')
 
     def detect(self):
-        self.opt = Opt()
-        self.opt.cfg = self.configuration.value("CFG_PATH")
-        self.opt.output = self.configuration.value("SAVE_IMG_PATH")
-        self.opt.weights = self.configuration.value("WEIGHTS_PATH")
-        self.hkDetect = hkDetect(self.opt)
-        for camNo in self.configuration.value('CAM_LIST'):
-            cam = Camera(camNo,self.opt,1)
-            cam.show_picture_signal.connect(self.image_show)
-            self.cams.update({camNo: cam})
-            cam.openCam()
-
-
+        if(len(self.cams) == 0):
+            self.opt = Opt()
+            self.opt.cfg = self.configuration.value("CFG_PATH")
+            self.opt.output = self.configuration.value("SAVE_IMG_PATH")
+            self.opt.weights = self.configuration.value("WEIGHTS_PATH")
+            self.hkDetect = hkDetect(self.opt)
+            self.GreenButton.setEnabled(False)
+            self.RedButton.setEnabled(True)
+            for camNo in self.configuration.value('CAM_LIST'):
+                cam = Camera(camNo, self.opt, 1)
+                cam.show_picture_signal.connect(self.image_show)
+                self.cams.update({camNo: cam})
+                cam.openCam()
+        else:
+            for camNo in self.cams:
+                self.cams[camNo].openCam()
 
 
     def stop(self):
         for key in self.cams:
             self.cams[key].g_bExit = True
             self.cams[key].closeCam()
+        self.result.close()
+        self.GreenButton.setEnabled(True)
+        self.RedButton.setEnabled(False)
 
     def reset(self):
-        self.speedValue = 0.0
-        self.ratio = 0.0
+        for camNo in self.cams:
+            row = int(camNo)-1
+            self.model.setItem(row, 1, QStandardItem("0"))
+            self.model.setItem(row, 2,QStandardItem("0"))
+            self.model.setItem(row, 3, QStandardItem("0"))
+            self.model.setItem(row, 4, QStandardItem("0.0%"))
         self.detect_num = 0
         self.good_num = 0
+        self.bad_num = 0
+        self.bad_ratio = 0
+        self.model.setItem(4, 1, QStandardItem("0"))
+        self.model.setItem(4, 2, QStandardItem("0"))
+        self.model.setItem(4, 3, QStandardItem("0"))
+        self.model.setItem(4, 4, QStandardItem("0.0%"))
+        for key in self.cams:
+            self.cams[key].g_bExit = True
+            self.cams[key].closeCam()
         self.hkDetect = None
-        self.detection_number_value.setText(str(self.detect_num) + "个")
-        self.speed_value.setText(str(self.speed) + "个/分钟")
-        self.ratio_value.setText(str(self.ratio) + "%")
+        self.cams.clear()
+        self.GreenButton.setEnabled(True)
+        self.RedButton.setEnabled(False)
 
-
-    def image_show(self,image,defect_type,camNo):
+    def image_show(self,image,defect_type,camNo,tip):
+        self.camera1_env_label.setStyleSheet("color:red;font-size:15px")
+        self.camera1_env_label.setText(tip)
         camera = self.cams[camNo]
-        image = cv2.resize(image, (self.opt.width, self.opt.height))
-        # originalshow = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-        # area = self.hkDetect.ostu(originalshow)
-        # if(area>DETECTION_THRESHOLD):
-        #     camera.imgs.append(originalshow)
-        # elif(len(camera.imgs)):
-        #     camera.detect_num+=1
-        #     select_img = camera.imgs[int(len(camera.imgs)/2)]
-        #     result_image,defect_classes = self.hkDetect.detect(select_img, self.opt)
-        #
-        #     if(len(defect_classes)==1 or "good" in defect_classes ):
-        #         camera.good_num+=1
-        #         self.cameraResultLabels[camNo].setStyleSheet("color:green;font-size:14px")
-        #     else:
-        #          camera.bad_num+=1
-        #          self.cameraResultLabels[camNo].setStyleSheet("color:red;font-size:14px")
+        image = cv2.resize(image, ( self.cameraDetectionLabels[camNo].width(), self.cameraDetectionLabels[camNo].height()))
         result_image = QtGui.QImage(image.data, image.shape[1], image.shape[0],
                                 QtGui.QImage.Format_RGB888)  # 把读取到的视频数据变成QImage形式
         self.cameraDetectionLabels[camNo].setPixmap(QtGui.QPixmap.fromImage(result_image))
-        defect_type = ''.join(defect_type)
+        self.detect_num += 1
+
+        if ( "good"  in defect_type and len(defect_type) == 1):
+            self.good_num += 1
+            self.cameraResultLabels[camNo].setStyleSheet("color:white;font-size:15px")
+            self.result.write(str(self.detect_num) + ' ---- ' + defect_type[0] + "\n")
+        else:
+            if "good" in defect_type:
+                defect_type.remove("good")
+            defect_type = "/".join(defect_type)
+            self.bad_num += 1
+            self.cameraResultLabels[camNo].setStyleSheet("color:red;font-size:15px")
+            self.result.write(str(self.detect_num) + ' ---- ' + defect_type + "\n")
+        self.bad_ratio = round((self.bad_num / self.detect_num),3) * 100
         self.cameraResultLabels[camNo].setText(defect_type)
+
         row = int(camNo)-1
         self.model.setItem(row,1, QStandardItem(str(camera.detect_num)))
         self.model.setItem(row,2, QStandardItem(str(camera.good_num)))
         self.model.setItem(row,3, QStandardItem(str(camera.bad_num)))
-        self.model.setItem(row,4, QStandardItem(str((camera.bad_num/camera.detect_num)*100)+"%"))
-        camera.imgs.clear()
+        self.model.setItem(row,4, QStandardItem(str(round(camera.bad_num/camera.detect_num,3)*100)+"%"))
+        self.model.setItem(4, 1, QStandardItem(str(self.detect_num)))
+        self.model.setItem(4, 2, QStandardItem(str(self.good_num)))
+        self.model.setItem(4, 3, QStandardItem(str(self.bad_num)))
+        self.model.setItem(4, 4, QStandardItem(str(self.bad_ratio) + "%"))
 
-    #
+
+
+
+
+
+
+
+
+
+
+
+
     # def work_thread(self, cam=0, pData=0, nDataSize=0, camNo=0):
     #     stFrameInfo = MV_FRAME_OUT_INFO_EX()
     #     memset(byref(stFrameInfo), 0, sizeof(stFrameInfo))
