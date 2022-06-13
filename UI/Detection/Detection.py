@@ -1,27 +1,27 @@
-import sys
 import time
-import os
+
 from PyQt5 import QtCore, QtWidgets, QtGui
 from PyQt5.QtGui import QIcon, QPixmap, QStandardItem
 from UI.Detection.DetectionWin import DetectionWin
-from UI.Setting.Setting import Setting
 from utils.CommonHelper import CommonHelper
 from Service.hkDetect import hkDetect
-import numpy as np
 import cv2
 from model.Opt import Opt
 from model.Camera import Camera
 
-from  MvCameraControl_class import *
+from MvCameraControl_class import *
+
 winfun_ctype = WINFUNCTYPE
 DETECTION_THRESHOLD = 4000
 OUT_PATH = "../../output/Image/"
 
+
 class Detection(DetectionWin):
     deviceList = MV_CC_DEVICE_INFO_LIST()
     cam = MvCamera()
-    def __init__(self,configuration):
-        super(Detection,self).__init__()
+
+    def __init__(self, configuration):
+        super(Detection, self).__init__()
         self.setupUi(self)
         styleFile = '../resource/Detection.qss'
         # 换肤时进行全局修改，只需要修改不同的QSS文件即可
@@ -31,18 +31,20 @@ class Detection(DetectionWin):
         self.good_num = 0
         self.bad_num = 0
         self.bad_ratio = 0
-        self.cams={}
+        self.cams = {}
         self.configuration = configuration
         self.g_bExit = False
-        self.cameraDetectionLabels = {"1":self.camera1_detection_label,"2":self.camera2_detection_label,"3":self.camera3_detection_label,"4":self.camera4_detection_label}
-        self.cameraResultLabels = {"1":self.camera1_result_label,"2":self.camera2_result_label,"3":self.camera3_result_label,"4":self.camera4_result_label}
+        self.cameraDetectionLabels = {"1": self.camera1_detection_label, "2": self.camera2_detection_label,
+                                      "3": self.camera3_detection_label, "4": self.camera4_detection_label}
+        self.cameraResultLabels = {"1": self.camera1_result_label, "2": self.camera2_result_label,
+                                   "3": self.camera3_result_label, "4": self.camera4_result_label}
         self.GreenButton.clicked.connect(self.detect)
         self.RedButton.clicked.connect(self.stop)
         self.BlueButton.clicked.connect(self.reset)
         self.result = open('E:\\defect_detection-main\\result.txt', 'w')
 
     def detect(self):
-        if(len(self.cams) == 0):
+        if (len(self.cams) == 0):
             self.opt = Opt()
             self.opt.cfg = self.configuration.value("CFG_PATH")
             self.opt.output = self.configuration.value("SAVE_IMG_PATH")
@@ -59,7 +61,6 @@ class Detection(DetectionWin):
             for camNo in self.cams:
                 self.cams[camNo].openCam()
 
-
     def stop(self):
         for key in self.cams:
             self.cams[key].g_bExit = True
@@ -70,9 +71,9 @@ class Detection(DetectionWin):
 
     def reset(self):
         for camNo in self.cams:
-            row = int(camNo)-1
+            row = int(camNo) - 1
             self.model.setItem(row, 1, QStandardItem("0"))
-            self.model.setItem(row, 2,QStandardItem("0"))
+            self.model.setItem(row, 2, QStandardItem("0"))
             self.model.setItem(row, 3, QStandardItem("0"))
             self.model.setItem(row, 4, QStandardItem("0.0%"))
         self.detect_num = 0
@@ -91,50 +92,47 @@ class Detection(DetectionWin):
         self.GreenButton.setEnabled(True)
         self.RedButton.setEnabled(False)
 
-    def image_show(self,image,defect_type,camNo,tip):
-        self.camera1_env_label.setStyleSheet("color:red;font-size:15px")
-        self.camera1_env_label.setText(tip)
+    def image_show(self, image, defect_type, camNo, tip):
+        self.camera1_env_label.setStyleSheet("color:red;font-size:30px")
+        self.camera1_env_label.setText("")
+        # self.camera1_env_label.setText(tip)
         camera = self.cams[camNo]
-        image = cv2.resize(image, ( self.cameraDetectionLabels[camNo].width(), self.cameraDetectionLabels[camNo].height()))
+        image = cv2.resize(image,
+                           (self.opt.width, self.opt.height))
         result_image = QtGui.QImage(image.data, image.shape[1], image.shape[0],
-                                QtGui.QImage.Format_RGB888)  # 把读取到的视频数据变成QImage形式
+                                    QtGui.QImage.Format_RGB888)  # 把读取到的视频数据变成QImage形式
         self.cameraDetectionLabels[camNo].setPixmap(QtGui.QPixmap.fromImage(result_image))
         self.detect_num += 1
 
-        if ( "good"  in defect_type and len(defect_type) == 1):
+        if (len(defect_type) == 0):
             self.good_num += 1
-            self.cameraResultLabels[camNo].setStyleSheet("color:white;font-size:15px")
-            self.result.write(str(self.detect_num) + ' ---- ' + defect_type[0] + "\n")
+            self.cameraResultLabels[camNo].setStyleSheet("color:yellow;font-size:30px")
+            self.result.write(str(self.detect_num) + ' ---- 良品' + "\n")
+            self.cameraResultLabels[camNo].setText("良品")
         else:
-            if "good" in defect_type:
-                defect_type.remove("good")
-            defect_type = "/".join(defect_type)
+            self.cameraResultLabels[camNo].setStyleSheet("color:red;font-size:30px")
+            # if "good" in defect_type:
+            #     defect_type.remove("good")
+            if "damaged" in defect_type:
+                defect_type.remove("damaged")
+                defect_type.append("掉皮")
+            if len(defect_type) == 1:
+                self.cameraResultLabels[camNo].setText(defect_type[0])
+            if len(defect_type) == 2:
+                self.cameraResultLabels[camNo].setText(defect_type[0])
+                self.camera1_env_label.setText(defect_type[1])
             self.bad_num += 1
-            self.cameraResultLabels[camNo].setStyleSheet("color:red;font-size:15px")
-            self.result.write(str(self.detect_num) + ' ---- ' + defect_type + "\n")
-        self.bad_ratio = round((self.bad_num / self.detect_num),3) * 100
-        self.cameraResultLabels[camNo].setText(defect_type)
-
-        row = int(camNo)-1
-        self.model.setItem(row,1, QStandardItem(str(camera.detect_num)))
-        self.model.setItem(row,2, QStandardItem(str(camera.good_num)))
-        self.model.setItem(row,3, QStandardItem(str(camera.bad_num)))
-        self.model.setItem(row,4, QStandardItem(str(round(camera.bad_num/camera.detect_num,3)*100)+"%"))
+            self.result.write(str(self.detect_num) + ' ---- ' + "/".join(defect_type) + "\n")
+        self.bad_ratio = round((self.bad_num / self.detect_num), 3) * 100
+        row = int(camNo) - 1
+        self.model.setItem(row, 1, QStandardItem(str(camera.detect_num)))
+        self.model.setItem(row, 2, QStandardItem(str(camera.good_num)))
+        self.model.setItem(row, 3, QStandardItem(str(camera.bad_num)))
+        self.model.setItem(row, 4, QStandardItem(str(round(camera.bad_num / camera.detect_num, 3) * 100) + "%"))
         self.model.setItem(4, 1, QStandardItem(str(self.detect_num)))
         self.model.setItem(4, 2, QStandardItem(str(self.good_num)))
         self.model.setItem(4, 3, QStandardItem(str(self.bad_num)))
         self.model.setItem(4, 4, QStandardItem(str(self.bad_ratio) + "%"))
-
-
-
-
-
-
-
-
-
-
-
 
 
     # def work_thread(self, cam=0, pData=0, nDataSize=0, camNo=0):
@@ -152,5 +150,3 @@ class Detection(DetectionWin):
     #             print("no data[0x%x]" % ret)
     #         if self.cams[camNo].g_bExit == True:
     #             break
-
-

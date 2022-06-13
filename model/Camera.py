@@ -2,7 +2,7 @@ import os
 
 import numpy as np
 from PIL import Image, ImageStat
-
+import multiprocessing
 from  MvCameraControl_class import *
 from PyQt5.QtCore import pyqtSignal, QObject
 from Service.hkDetect import hkDetect
@@ -43,7 +43,7 @@ class Camera(QObject):
          self.hkDetect = hkDetect(opt)
         self.g_bExit = False
         self.slot = slot
-
+        self.cache_img = []
 
     def defectStatistic_init(self, path=None):
         if not os.path.exists(path) and os.path.exists('data' + os.sep + path):  # add data/ prefix if omitted
@@ -83,7 +83,9 @@ class Camera(QObject):
             print("set trigger mode fail! ret[0x%x]" % ret)
             sys.exit()
 
-        ret = self.cam.MV_CC_SetFloatValue("TriggerDelay", 2350000.0)
+        # ret = self.cam.MV_CC_SetFloatValue("TriggerDelay", 2350000.0)
+        ret = self.cam.MV_CC_SetFloatValue("TriggerDelay", 1500000.0)
+
         if ret != 0:
             print("set trigger delay fail! ret[0x%x]" % ret)
             sys.exit()
@@ -118,10 +120,10 @@ class Camera(QObject):
 
         try:
             if(self.slot==1):
-                 threading.Thread(target=self.detect_work_thread, args=(self.cam, data_buf , nPayloadSize,self.camNo)).start()
+                 multiprocessing.Process(target=self.read_work_thread, args=(self.cam, data_buf, nPayloadSize, self.camNo)).start()
+                 multiprocessing.Process(target=self.detect_work_thread, args=(self.cam, data_buf , nPayloadSize,self.camNo)).start()
             else:
                  threading.Thread(target=self.train_work_thread, args=(self.cam, data_buf, nPayloadSize, self.camNo)).start()
-
         except:
             print("error: unable to start thread")
 
@@ -145,8 +147,7 @@ class Camera(QObject):
             print("destroy handle fail! ret[0x%x]" % ret)
             sys.exit()
 
-
-    def detect_work_thread(self, cam=0, pData=0, nDataSize=0, camNo=0):
+    def read_work_thread(self, cam=0, pData=0, nDataSize=0, camNo=0):
         stFrameInfo = MV_FRAME_OUT_INFO_EX()
         memset(byref(stFrameInfo), 0, sizeof(stFrameInfo))
         while True:
@@ -156,8 +157,18 @@ class Camera(QObject):
                     stFrameInfo.nWidth, stFrameInfo.nHeight, stFrameInfo.nFrameNum))
                 image = np.asarray(pData).reshape((stFrameInfo.nHeight, stFrameInfo.nWidth))
                 image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-                cv2.imwrite('origin.jpg',image)
-                if (np.mean(image) < 245):
+                self.cache_img.append(image)
+
+
+
+
+    def detect_work_thread(self, cam=0, pData=0, nDataSize=0, camNo=0):
+        while True:
+            if(len(self.cache_img)>0):
+                start = time.time()
+                image = self.cache_img[0]
+                self.cache_img.pop(0)
+                if (np.mean(image) < 255):
                     self.detect_num += 1
                     originalshow = roi_split(image)
                     cv2.imwrite(str(self.detect_num) + '.jpg', originalshow)
@@ -177,24 +188,29 @@ class Camera(QObject):
                     elif (contrast < base_contrast * 0.7):
                         tip += "对比度过低"
 
-
                     detected_image, defect_type = self.hkDetect.detect(originalshow, self.opt)
-                    # cv2.imwrite("./"+str(self.detect_num)+".jpg",detected_image)
 
-                    if (len(defect_type)==1 and defect_type[0] == "good"):
+                    # cv2.imwrite("./"+str(self.detect_num)+".jpg",detected_image)
+                    # if (len(defect_type)==1 and defect_type[0] == "good"):
+                    if (len(defect_type) == 0):
                         self.good_num+=1
                     else:
                         self.bad_num+=1
 
                     if(defect_type is not ''):
                         # self.defectStatistic[defect_type] =  self.defectStatistic[defect_type]+1
+
                         self.show_picture_signal.emit(detected_image,defect_type,camNo,tip)
+
                         # nums = [self.detect_num,self.good_num,self.bad_num]
                         # self.show_detect_info.emit(nums,camNo)
-                else:
-                    print("no data[0x%x]" % ret)
-                if self.g_bExit == True:
-                    break
+                    end = time.time()
+                    print('run time: %s Seconds' % (end-start))
+
+
+            if self.g_bExit == True:
+                break
+
 
     def train_work_thread(self, cam=0, pData=0, nDataSize=0, camNo=0):
         stFrameInfo = MV_FRAME_OUT_INFO_EX()

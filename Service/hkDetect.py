@@ -9,7 +9,6 @@ BLUR_KERNEL_SIZE = 5
 class hkDetect:
     def __init__(self,opt=None):
         self.opt = opt
-        self.deep_learn_result = ''
         self.init_model(opt)
 
     def init_model(self,opt):
@@ -27,7 +26,7 @@ class hkDetect:
         if weights.endswith('.pt'):  # pytorch format
             self.model.load_state_dict(torch.load(weights, map_location=self.device)['model'])
 
-            # model.load_state_dict(torch.load(weights, map_location='cpu'))
+            # self.model.load_state_dict(torch.load(weights, map_location='cpu'))
         else:  # darknet format
             load_darknet_weights(self.model, weights)
 
@@ -74,6 +73,8 @@ class hkDetect:
         _ = self.model(img.half() if half else img.float()) if self.device.type != 'cpu' else None  # run once
 
     def detect(self,image0,opt=None):
+        box = 0
+        deep_learn_result=''
         binary = None
         image = letterbox(image0, new_shape=416)[0]
         defect_class=[]
@@ -110,9 +111,9 @@ class hkDetect:
                 # Print results
                 for c in det[:, -1].unique():
                     n = (det[:, -1] == c).sum()  # detections per class
-                    self.deep_learn_result = self.names[int(c)]
-                    s += '%g %ss, ' % (n,  self.deep_learn_result)  # add to string
-                    defect_class.append( self.deep_learn_result)
+                    deep_learn_result = self.names[int(c)]
+                    s += '%g %ss, ' % (n,  deep_learn_result)  # add to string
+                    defect_class.append( deep_learn_result)
 
 
             # Write results画边界框和标签
@@ -120,18 +121,22 @@ class hkDetect:
 
                 for *xyxy, conf, cls in det:
                         # if(self.names[int(cls)] is "good" and  conf<self.opt.confidence):
-                        label = '%s %.2f' % (self.names[int(cls)], conf)    # 索引值对应的类别，置信度
-                        xt,yt = plot_one_box(xyxy, im0, label=label, color=self.colors[int(cls)])
-                        confidence = conf.item()
-                        xy = xyxy[0].item()
-
+                        if((xyxy[2].item()-xyxy[0].item())*(xyxy[3].item()-xyxy[1].item()))>20*20:
+                            box+=1
+                            # label = '%s %.2f' % (self.names[int(cls)], conf)    # 索引值对应的类别，置信度
+                            label = '%s' % (self.names[int(cls)])     # 索引值对应的类别
+                            xt,yt = plot_one_box(xyxy, im0, label=label, color=self.colors[int(cls)])
+                            confidence = conf.item()
+                            xy = xyxy[0].item()
+        if(box == 0 and deep_learn_result !='' ):
+            defect_class.remove(deep_learn_result)
         # 杂质检测
         if (self.zazhi_detect(image0)):
             defect_class.append("杂质")
 
-        # 粘底检测
-        if(self.canny_detect(image0)):
-            defect_class.append("底面刮花")
+        # # 粘底检测
+        # if(self.canny_detect(image0)):
+        #     defect_class.append("底面刮花")
 
         return im0,defect_class
 
@@ -159,7 +164,7 @@ class hkDetect:
                 if 230 >= gray[m, n] >= 1:
                     lst2.append(gray[m, n])
         b = np.median(lst2)
-        print("均值",b)
+        #print("均值",b)
         #if b < 110:
         ret, binary = cv2.threshold(gray, 0.65*b, 255, cv2.THRESH_BINARY_INV)
         #else:
