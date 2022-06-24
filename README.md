@@ -27,7 +27,7 @@ The https://github.com/ultralytics/yolov3 repo contains inference and training c
 # Requirements
 
 Python 3.7 or later with all `pip install -U -r requirements.txt` packages including `torch >= 1.5`. Docker images come with all dependencies preinstalled. Docker requirements are: 
-- Nvidia Driver >= 440.44
+- Nvidia Driver >= 440.45
 - Docker Engine - CE >= 19.03
 
 # Tutorials
