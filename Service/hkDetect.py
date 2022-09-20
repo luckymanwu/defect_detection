@@ -121,7 +121,7 @@ class hkDetect:
 
                 for *xyxy, conf, cls in det:
                         # if(self.names[int(cls)] is "good" and  conf<self.opt.confidence):
-                        if((xyxy[2].item()-xyxy[0].item())*(xyxy[3].item()-xyxy[1].item()))>20*20:
+                        if((xyxy[2].item()-xyxy[0].item())*(xyxy[3].item()-xyxy[1].item()))>25*25:
                             box+=1
                             # label = '%s %.2f' % (self.names[int(cls)], conf)    # 索引值对应的类别，置信度
                             label = '%s' % (self.names[int(cls)])     # 索引值对应的类别
@@ -159,11 +159,13 @@ class hkDetect:
 
         w, h = gray.shape
         lst2 = []
-        for m in range(w):
-            for n in range(h):
-                if 230 >= gray[m, n] >= 1:
-                    lst2.append(gray[m, n])
-        b = np.median(lst2)
+        # for m in range(w):
+        #     for n in range(h):
+        #         if 230 >= gray[m, n] >= 1:
+        #             lst2.append(gray[m, n])
+        # b = np.median(lst2)
+        # print(b)
+        b=56
         #print("均值",b)
         #if b < 110:
         ret, binary = cv2.threshold(gray, 0.65*b, 255, cv2.THRESH_BINARY_INV)

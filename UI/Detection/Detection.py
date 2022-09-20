@@ -92,7 +92,7 @@ class Detection(DetectionWin):
         self.GreenButton.setEnabled(True)
         self.RedButton.setEnabled(False)
 
-    def image_show(self, image, defect_type, camNo, tip):
+    def image_show(self, image, defect_type, camNo):
         self.camera1_env_label.setStyleSheet("color:red;font-size:30px")
         self.camera1_env_label.setText("")
         # self.camera1_env_label.setText(tip)
@@ -102,37 +102,37 @@ class Detection(DetectionWin):
         result_image = QtGui.QImage(image.data, image.shape[1], image.shape[0],
                                     QtGui.QImage.Format_RGB888)  # 把读取到的视频数据变成QImage形式
         self.cameraDetectionLabels[camNo].setPixmap(QtGui.QPixmap.fromImage(result_image))
-        self.detect_num += 1
 
-        if (len(defect_type) == 0):
-            self.good_num += 1
-            self.cameraResultLabels[camNo].setStyleSheet("color:yellow;font-size:30px")
-            self.result.write(str(self.detect_num) + ' ---- 良品' + "\n")
-            self.cameraResultLabels[camNo].setText("良品")
-        else:
-            self.cameraResultLabels[camNo].setStyleSheet("color:red;font-size:30px")
-            # if "good" in defect_type:
-            #     defect_type.remove("good")
-            if "damaged" in defect_type:
-                defect_type.remove("damaged")
-                defect_type.append("掉皮")
-            if len(defect_type) == 1:
-                self.cameraResultLabels[camNo].setText(defect_type[0])
-            if len(defect_type) == 2:
-                self.cameraResultLabels[camNo].setText(defect_type[0])
-                self.camera1_env_label.setText(defect_type[1])
-            self.bad_num += 1
-            self.result.write(str(self.detect_num) + ' ---- ' + "/".join(defect_type) + "\n")
-        self.bad_ratio = round((self.bad_num / self.detect_num), 3) * 100
-        row = int(camNo) - 1
-        self.model.setItem(row, 1, QStandardItem(str(camera.detect_num)))
-        self.model.setItem(row, 2, QStandardItem(str(camera.good_num)))
-        self.model.setItem(row, 3, QStandardItem(str(camera.bad_num)))
-        self.model.setItem(row, 4, QStandardItem(str(round(camera.bad_num / camera.detect_num, 3) * 100) + "%"))
-        self.model.setItem(4, 1, QStandardItem(str(self.detect_num)))
-        self.model.setItem(4, 2, QStandardItem(str(self.good_num)))
-        self.model.setItem(4, 3, QStandardItem(str(self.bad_num)))
-        self.model.setItem(4, 4, QStandardItem(str(self.bad_ratio) + "%"))
+
+        # if (len(defect_type) == 0):
+        #     self.good_num += 1
+        #     self.cameraResultLabels[camNo].setStyleSheet("color:yellow;font-size:30px")
+        #     self.result.write(str(self.detect_num) + ' ---- 良品' + "\n")
+        #     self.cameraResultLabels[camNo].setText("良品")
+        # else:
+        #     self.cameraResultLabels[camNo].setStyleSheet("color:red;font-size:30px")
+        #     # if "good" in defect_type:
+        #     #     defect_type.remove("good")
+        #     if "damaged" in defect_type:
+        #         defect_type.remove("damaged")
+        #         defect_type.append("掉皮")
+        #     if len(defect_type) == 1:
+        #         self.cameraResultLabels[camNo].setText(defect_type[0])
+        #     if len(defect_type) == 2:
+        #         self.cameraResultLabels[camNo].setText(defect_type[0])
+        #         self.camera1_env_label.setText(defect_type[1])
+        #     self.bad_num += 1
+        #     self.result.write(str(self.detect_num) + ' ---- ' + "/".join(defect_type) + "\n")
+        # self.bad_ratio = round((self.bad_num / self.detect_num), 3) * 100
+        # row = int(camNo) - 1
+        # self.model.setItem(row, 1, QStandardItem(str(camera.detect_num)))
+        # self.model.setItem(row, 2, QStandardItem(str(camera.good_num)))
+        # self.model.setItem(row, 3, QStandardItem(str(camera.bad_num)))
+        # self.model.setItem(row, 4, QStandardItem(str(round(camera.bad_num / camera.detect_num, 3) * 100) + "%"))
+        # self.model.setItem(4, 1, QStandardItem(str(self.detect_num)))
+        # self.model.setItem(4, 2, QStandardItem(str(self.good_num)))
+        # self.model.setItem(4, 3, QStandardItem(str(self.bad_num)))
+        # self.model.setItem(4, 4, QStandardItem(str(self.bad_ratio) + "%"))
 
 
     # def work_thread(self, cam=0, pData=0, nDataSize=0, camNo=0):

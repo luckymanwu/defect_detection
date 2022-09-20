@@ -1,4 +1,5 @@
 import os
+import random
 
 import numpy as np
 from PIL import Image, ImageStat
@@ -23,7 +24,7 @@ distance = 75.0
 base_bright = 193
 base_contrast = 0.62
 class Camera(QObject):
-    show_picture_signal = pyqtSignal(object, object, object,str)
+    show_picture_signal = pyqtSignal(object, object, object)
     show_detect_info = pyqtSignal(object,object)
     sample_signal = pyqtSignal(object,object,object)
     def __init__(self,camNo,opt,slot):
@@ -78,13 +79,12 @@ class Camera(QObject):
                 print("Warning: Get Packet Size fail! ret[0x%x]" % nPacketSize)
 
         # ch:设置触发模式为ON | en:Set trigger mode as off
-        ret = self.cam.MV_CC_SetEnumValue("TriggerMode", MV_TRIGGER_MODE_ON)
+        ret = self.cam.MV_CC_SetEnumValue("TriggerMode", MV_TRIGGER_MODE_OFF)
         if ret != 0:
             print("set trigger mode fail! ret[0x%x]" % ret)
             sys.exit()
 
-        # ret = self.cam.MV_CC_SetFloatValue("TriggerDelay", 2350000.0)
-        ret = self.cam.MV_CC_SetFloatValue("TriggerDelay", 1500000.0)
+        # ret = self.cam.MV_CC_SetFloatValue("TriggerDelay", 1320000.0)
 
         if ret != 0:
             print("set trigger delay fail! ret[0x%x]" % ret)
@@ -120,8 +120,8 @@ class Camera(QObject):
 
         try:
             if(self.slot==1):
-                 multiprocessing.Process(target=self.read_work_thread, args=(self.cam, data_buf, nPayloadSize, self.camNo)).start()
-                 multiprocessing.Process(target=self.detect_work_thread, args=(self.cam, data_buf , nPayloadSize,self.camNo)).start()
+                 # threading.Thread(target=self.read_work_thread, args=(self.cam, data_buf, nPayloadSize, self.camNo)).start()
+                 threading.Thread(target=self.trash_detect_work_thread, args=(self.cam, data_buf , nPayloadSize,self.camNo)).start()
             else:
                  threading.Thread(target=self.train_work_thread, args=(self.cam, data_buf, nPayloadSize, self.camNo)).start()
         except:
@@ -147,66 +147,67 @@ class Camera(QObject):
             print("destroy handle fail! ret[0x%x]" % ret)
             sys.exit()
 
-    def read_work_thread(self, cam=0, pData=0, nDataSize=0, camNo=0):
+    # def read_work_thread(self, cam=0, pData=0, nDataSize=0, camNo=0):
+    #     stFrameInfo = MV_FRAME_OUT_INFO_EX()
+    #     memset(byref(stFrameInfo), 0, sizeof(stFrameInfo))
+    #     while True:
+    #         ret = cam.MV_CC_GetOneFrameTimeout(pData, nDataSize, stFrameInfo, 1500)
+    #         if ret == 0:
+    #             print("get one frame: Width[%d], Height[%d], nFrameNum[%d]" % (
+    #                 stFrameInfo.nWidth, stFrameInfo.nHeight, stFrameInfo.nFrameNum))
+    #             image = np.asarray(pData).reshape((stFrameInfo.nHeight, stFrameInfo.nWidth))
+    #             image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+    #             cv2.imwrite( str(random.randint(1000,2000))+ '.jpg', image)
+    #             self.cache_img.append(image)
+
+    def trash_detect_work_thread(self, cam=0, pData=0, nDataSize=0, camNo=0):
         stFrameInfo = MV_FRAME_OUT_INFO_EX()
         memset(byref(stFrameInfo), 0, sizeof(stFrameInfo))
         while True:
-            ret = cam.MV_CC_GetOneFrameTimeout(pData, nDataSize, stFrameInfo, 1000)
+            ret = cam.MV_CC_GetOneFrameTimeout(pData, nDataSize, stFrameInfo, 1500)
             if ret == 0:
                 print("get one frame: Width[%d], Height[%d], nFrameNum[%d]" % (
                     stFrameInfo.nWidth, stFrameInfo.nHeight, stFrameInfo.nFrameNum))
                 image = np.asarray(pData).reshape((stFrameInfo.nHeight, stFrameInfo.nWidth))
                 image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
                 self.cache_img.append(image)
+            if (len(self.cache_img) > 0):
+                image = self.cache_img[0]
+                self.cache_img.pop(0)
+                detected_image, defect_type = self.hkDetect.detect(image, self.opt)
+                self.show_picture_signal.emit(detected_image, defect_type, camNo)
 
+            if self.g_bExit == True:
+                break
 
 
 
     def detect_work_thread(self, cam=0, pData=0, nDataSize=0, camNo=0):
+        stFrameInfo = MV_FRAME_OUT_INFO_EX()
+        memset(byref(stFrameInfo), 0, sizeof(stFrameInfo))
         while True:
+            ret = cam.MV_CC_GetOneFrameTimeout(pData, nDataSize, stFrameInfo, 1500)
+            if ret == 0:
+                print("get one frame: Width[%d], Height[%d], nFrameNum[%d]" % (
+                    stFrameInfo.nWidth, stFrameInfo.nHeight, stFrameInfo.nFrameNum))
+                image = np.asarray(pData).reshape((stFrameInfo.nHeight, stFrameInfo.nWidth))
+                image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+                self.cache_img.append(image)
             if(len(self.cache_img)>0):
-                start = time.time()
                 image = self.cache_img[0]
                 self.cache_img.pop(0)
                 if (np.mean(image) < 255):
                     self.detect_num += 1
                     originalshow = roi_split(image)
                     cv2.imwrite(str(self.detect_num) + '.jpg', originalshow)
-                    # image = cv2.resize(image, (self.opt.width, self.opt.height))
-                    # ret, image = cv2.threshold(image, 45, 255, cv2.THRESH_TOZERO_INV)
-                    # originalshow = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-                    bright = self.hkDetect.brightness(originalshow)
-                    contrast = self.hkDetect.contrast(originalshow)
-                    tip = ""
-                    if(bright > base_bright * 1.3):
-                        tip = "亮度过高"
-                    elif (bright < base_bright * 0.7):
-                        tip = "亮度过低"
-
-                    if (contrast > base_contrast * 1.3):
-                        tip += " 对比度过高"
-                    elif (contrast < base_contrast * 0.7):
-                        tip += "对比度过低"
-
                     detected_image, defect_type = self.hkDetect.detect(originalshow, self.opt)
-
-                    # cv2.imwrite("./"+str(self.detect_num)+".jpg",detected_image)
-                    # if (len(defect_type)==1 and defect_type[0] == "good"):
                     if (len(defect_type) == 0):
                         self.good_num+=1
                     else:
                         self.bad_num+=1
 
                     if(defect_type is not ''):
-                        # self.defectStatistic[defect_type] =  self.defectStatistic[defect_type]+1
-
-                        self.show_picture_signal.emit(detected_image,defect_type,camNo,tip)
-
-                        # nums = [self.detect_num,self.good_num,self.bad_num]
-                        # self.show_detect_info.emit(nums,camNo)
-                    end = time.time()
-                    print('run time: %s Seconds' % (end-start))
-
+                        self.show_picture_signal.emit(detected_image,defect_type,camNo,"")
 
             if self.g_bExit == True:
                 break

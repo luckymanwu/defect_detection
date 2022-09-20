@@ -2,7 +2,7 @@ class Opt(object):
     def __init__(self):
         super(Opt, self).__init__()
         self.fps = 10
-        self.width = 380
+        self.width = 360
         self.height = 300
         self.agnostic_nms=False
         self.augment=False
