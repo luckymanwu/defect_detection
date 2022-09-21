@@ -45,7 +45,7 @@ def check_git_status():
 
 def load_classes(path):
     # Loads *.names file at 'path'
-    with open(path, 'r') as f:
+    with open(path, 'r',encoding='utf-8') as f:
         names = f.read().split('\n')
     return list(filter(None, names))  # filter removes empty strings (such as last line)
 
@@ -840,6 +840,10 @@ def plot_one_box(x, img, color=None, label=None, line_thickness=None):
         t_size = cv2.getTextSize(label, 0, fontScale=tl / 3, thickness=tf)[0]
         c2 = c1[0] + t_size[0], c1[1] - t_size[1] - 3
         cv2.rectangle(img, c1, c2, color, -1, cv2.LINE_AA)  # filled
+        if label=="塑料瓶":
+            label ="plastic bottle"
+        if label == "干电池":
+            label ="battery"
         cv2.putText(img, label, (c1[0], c1[1] - 2), 0, tl / 3, [225, 255, 255], thickness=tf, lineType=cv2.LINE_AA)
     return xm,ym
 
@@ -1086,3 +1090,5 @@ def plot_results(start=0, stop=0, bucket='', id=()):  # from project.project imp
 
     ax[1].legend()
     fig.savefig('results.png', dpi=200)
+
+

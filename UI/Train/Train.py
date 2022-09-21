@@ -835,8 +835,7 @@ class TrainThread(QThread):
         init_seeds()
         data_dict = parse_data_cfg(data)
         name_dict = parse_rbc_name(opt.names)
-        train_label_path = data_dict['label_train']
-        train_Unlabel_path = data_dict['unlabel_train']
+        train_label_path = data_dict['train']
         # train_path= data_dict['train']
         test_path = data_dict['valid']
         nc = 1 if opt.single_cls else int(data_dict['classes'])  # number of classes
@@ -935,7 +934,7 @@ class TrainThread(QThread):
             model.yolo_layers = model.module.yolo_layers  # move yolo layer indices to top level
 
         label_file = readData(train_label_path)
-        unLabel_file = readData(train_Unlabel_path)
+
 
         # Dataset
         dataset = LoadImagesAndLabels(train_label_path, img_size, batch_size,

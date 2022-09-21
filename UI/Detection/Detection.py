@@ -102,7 +102,9 @@ class Detection(DetectionWin):
         result_image = QtGui.QImage(image.data, image.shape[1], image.shape[0],
                                     QtGui.QImage.Format_RGB888)  # 把读取到的视频数据变成QImage形式
         self.cameraDetectionLabels[camNo].setPixmap(QtGui.QPixmap.fromImage(result_image))
-
+        self.cameraResultLabels[camNo].setStyleSheet("color:green;font-size:30px")
+        if(len(defect_type)>0):
+            self.cameraResultLabels[camNo].setText(defect_type[0])
 
         # if (len(defect_type) == 0):
         #     self.good_num += 1

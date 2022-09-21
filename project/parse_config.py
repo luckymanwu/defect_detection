@@ -75,7 +75,7 @@ def parse_rbc_name(path):
     if not os.path.exists(path) and os.path.exists('data' + os.sep + path):  # add data/ prefix if omitted
         path = 'data' + os.sep + path
 
-    with open(path, 'r') as f:
+    with open(path, 'r', encoding='UTF-8') as f:
         lines = f.readlines()
 
     options = dict()
